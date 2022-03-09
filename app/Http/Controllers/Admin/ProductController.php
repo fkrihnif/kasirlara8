@@ -11,30 +11,72 @@ class ProductController extends Controller
 {
     public function index()
     {
-        $products = Product::all();
+        $products = Product::orderBy('id', 'DESC')->get();
         $categories = Category::all();
-        return view('admin.product.index', compact('products','categories'));
+        return view('admin.product.index', compact('products', 'categories'));
     }
     public function store(Request $request)
     {
-        $product = Product::count();
+        // $product = Product::count();
+        // $validatedData = $request->validate([
+        //     'product_code' => 'required|unique:product'
+        // ]);
+        // Product::create($request->all());
+        // toast('Data produk berhasil ditambah')->autoClose(2000)->hideCloseButton();
+        // return redirect()->back();
+
         $validatedData = $request->validate([
             'product_code' => 'required|unique:product'
         ]);
-        Product::create($request->all());
+
+        $product = new Product();
+
+        $product->product_code = $request->get('product_code');
+        $product->name = $request->get('name');
+        $product->quantity = $request->get('quantity');
+        $product->price = $request->get('price');
+        $product->price3 = $request->get('price3');
+        $product->price6 = $request->get('price6');
+        $product->category_id = $request->get('category_id');
+
+        $product->save();
         toast('Data produk berhasil ditambah')->autoClose(2000)->hideCloseButton();
         return redirect()->back();
     }
     public function update(Request $request)
     {
-        $validatedData = $request->validate([
-            'product_code' => 'required|unique:product,product_code,'. $request->id,
-        ]);
+        // $validatedData = $request->validate([
+        //     'product_code' => 'required|unique:product,product_code,' . $request->id,
+        // ]);
+        // $product = Product::find($request->id);
+        // $product->update($request->all());
+        // toast('Data produk berhasil diubah')->autoClose(2000)->hideCloseButton();
+        // return redirect()->back();
+
         $product = Product::find($request->id);
-        $product->update($request->all());
+        $validatedData = $request->validate([
+            'product_code' => 'required|unique:product,product_code,' . $request->id,
+        ]);
+
+        $product->product_code = $request->get('product_code');
+        $product->name = $request->get('name');
+        $product->quantity = $request->get('quantity');
+        $product->price = $request->get('price');
+        $product->price3 = $request->get('price3');
+        $product->price6 = $request->get('price6');
+        $product->category_id = $request->get('category_id');
+        $product->save();
+
         toast('Data produk berhasil diubah')->autoClose(2000)->hideCloseButton();
         return redirect()->back();
     }
+
+    public function print($id)
+    {
+        $barcode = Product::find($id);
+        return view('admin.product.print', compact('barcode'));
+    }
+
     public function delete(Request $request)
     {
         $product = Product::find($request->id);

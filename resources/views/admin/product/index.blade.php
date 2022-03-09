@@ -6,12 +6,15 @@
       <div class="card">
         <div class="card-header justify-content-between d-flex d-inline">
           <h4 class="card-title"> Data Produk</h4>
-          <a href="#" data-toggle="modal" data-target="#tambah"><i class="fas fa-plus"> Tambah</i></a>
+          <a href="#" data-toggle="modal" data-target="#tambah"><i class="btn btn-sm btn-primary shadow-sm">+ Tambah</i></a>
         </div>
         <div class="card-body">
           <div class="table-responsive">
             <table class="table table-bordered" id="dataTable">
               <thead class=" text-primary">
+                <th>
+                    No.
+                </th>
                 <th>
                   Kode Produk
                 </th>
@@ -22,23 +25,30 @@
                   Stok
                 </th>
                 <th>
-                  Harga
+                  Harga 1 | 3 | 6
                 </th>
                 <th>
                   Aksi
                 </th>
               </thead>
               <tbody>
+                  <?php 
+                    $i = 1;
+                    ?>
                   @foreach($products as $product)
                   <tr>
-                      <td>{{ $product->product_code }}</td>
+                      <td>{{ $i++ }}</td>
+                      <td>{{ $product->product_code }}
+                        <br> {!! DNS1D::getBarcodeHTML($product->product_code, 'UPCA') !!}
+                    </td>
                       <td>{{ $product->name }}</td>
                       <td>{{ $product->quantity }}</td>
-                      <td>{{ $product->price }}</td>
+                      <td>{{ $product->price }} | {{ $product->price3 }} | {{ $product->price6 }}</td>
                       <td>
                           <a href="#" data-id="{{ $product->id }}" data-name="{{ $product->name }}"
-                            data-code="{{ $product->product_code }}" data-quantity="{{ $product->quantity }}" data-price="{{ $product->price }}" data-category="{{ $product->category_id }}"  data-toggle="modal" data-target="#edit"><i class="fas fa-edit"></i></a>
+                            data-code="{{ $product->product_code }}" data-quantity="{{ $product->quantity }}" data-price="{{ $product->price }}" data-price3="{{ $product->price3 }}" data-price6="{{ $product->price6 }}" data-category="{{ $product->category_id }}"  data-toggle="modal" data-target="#edit"><i class="fas fa-edit"></i></a>
                           <a href="#" data-target="#delete" data-toggle="modal" data-id="{{ $product->id }}"><i class="fas fa-trash"></i></a>
+                          <a href="{{ route('admin.product.printBarcode', $product->id) }}" target="_blank"><i class="fas fa-print"></i></a>
                       </td>
                   </tr>
                   @endforeach
@@ -85,22 +95,49 @@
                     </div>
                     <div class="form-group">
                         <label for="quantity">Jumlah</label>
-                        <input type="text" class="form-control @error('quantity') is-invalid @enderror" id="quantity" name="quantity" required>
+                        <input type="number" class="form-control @error('quantity') is-invalid @enderror" id="quantity" name="quantity" required>
                         @error('quantity')
                         <div class="invalid-feedback">
                             {{$message}}
                         </div>
                         @enderror
                     </div>
-                    <div class="form-group">
-                        <label for="price">Harga</label>
-                        <input type="text" class="form-control @error('price') is-invalid @enderror" id="price" name="price" required>
-                        @error('price')
-                        <div class="invalid-feedback">
-                            {{$message}}
+                    <div class="row input_fields_wrap">
+                        <div class="col-4">
+                            <div class="form-group">
+                                <label for="price">Harga</label>
+                                <input type="number" class="form-control @error('price') is-invalid @enderror" id="price" name="price" required>
+                                @error('price')
+                                <div class="invalid-feedback">
+                                    {{$message}}
+                                </div>
+                                @enderror
+                            </div>
                         </div>
-                        @enderror
+                        <div class="col-4">
+                            <div class="form-group">
+                                <label for="price3">Harga 3</label>
+                                <input type="number" class="form-control @error('price3') is-invalid @enderror" id="price3" name="price3" required>
+                                @error('price3')
+                                <div class="invalid-feedback">
+                                    {{$message}}
+                                </div>
+                                @enderror
+                            </div>
+                        </div>
+                        <div class="col-4">
+                            <div class="form-group">
+                                <label for="price6">Harga 6</label>
+                                <input type="number" class="form-control @error('price6') is-invalid @enderror" id="price6" name="price6" required>
+                                @error('price6')
+                                <div class="invalid-feedback">
+                                    {{$message}}
+                                </div>
+                                @enderror
+                            </div>
+                        </div>
                     </div>
+                
                     <div class="form-group">
                         <label for="category_id">Kategori Produk</label>
                         <select name="category_id" id="category_id" class="custom-select @error('category_id') is-invalid @enderror">
@@ -186,22 +223,49 @@
                     </div>
                     <div class="form-group">
                         <label for="quantity">Jumlah</label>
-                        <input type="text" class="form-control @error('quantity') is-invalid @enderror" id="quantity" name="quantity" value="{{ old('quantity') }}" required>
+                        <input type="number" class="form-control @error('quantity') is-invalid @enderror" id="quantity" name="quantity" value="{{ old('quantity') }}" required>
                         @error('quantity')
                         <div class="invalid-feedback">
                             {{$message}}
                         </div>
                         @enderror
                     </div>
-                    <div class="form-group">
-                        <label for="price">Harga</label>
-                        <input type="text" class="form-control @error('price') is-invalid @enderror" id="price" name="price" value="{{ old('price') }}" required>
-                        @error('price')
-                        <div class="invalid-feedback">
-                            {{$message}}
+                    <div class="row input_fields_wrap">
+                        <div class="col-4">
+                            <div class="form-group">
+                                <label for="price">Harga 1</label>
+                                <input type="number" class="form-control @error('price') is-invalid @enderror" id="price" name="price" value="{{ old('price') }}" required>
+                                @error('price')
+                                <div class="invalid-feedback">
+                                    {{$message}}
+                                </div>
+                                @enderror
+                            </div>
                         </div>
-                        @enderror
+                        <div class="col-4">
+                            <div class="form-group">
+                                <label for="price3">Harga 3</label>
+                                <input type="number" class="form-control @error('price3') is-invalid @enderror" id="price3" name="price3" value="{{ old('price3') }}" required>
+                                @error('price3')
+                                <div class="invalid-feedback">
+                                    {{$message}}
+                                </div>
+                                @enderror
+                            </div>
+                        </div>
+                        <div class="col-4">
+                            <div class="form-group">
+                                <label for="price6">Harga 6</label>
+                                <input type="number" class="form-control @error('price6') is-invalid @enderror" id="price6" name="price6" value="{{ old('price6') }}" required>
+                                @error('price6')
+                                <div class="invalid-feedback">
+                                    {{$message}}
+                                </div>
+                                @enderror
+                            </div>
+                        </div>
                     </div>
+                
                     <div class="form-group">
                         <label for="category_id">Kategori Produk</label>
                         <select name="category_id" id="category_id" class="custom-select @error('category_id') is-invalid @enderror">
@@ -234,6 +298,8 @@
         var name = $(e.relatedTarget).data('name');
         var quantity = $(e.relatedTarget).data('quantity');
         var price = $(e.relatedTarget).data('price');
+        var price3 = $(e.relatedTarget).data('price3');
+        var price6 = $(e.relatedTarget).data('price6');
         var category = $(e.relatedTarget).data('category');
         
         $('#edit').find('input[name="id"]').val(id);
@@ -241,6 +307,8 @@
         $('#edit').find('input[name="name"]').val(name);
         $('#edit').find('input[name="quantity"]').val(quantity);
         $('#edit').find('input[name="price"]').val(price);
+        $('#edit').find('input[name="price3"]').val(price3);
+        $('#edit').find('input[name="price6"]').val(price6);
         $('#edit').find('select[name="category_id"]').val(category);
     });
     

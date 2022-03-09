@@ -6,7 +6,7 @@
       <div class="card">
         <div class="card-header justify-content-between d-flex d-inline">
           <h4 class="card-title"> Data Pasok</h4>
-          <a href="#" data-toggle="modal" data-target="#tambah"><i class="fas fa-plus"> Tambah</i></a>
+          <a href="#" data-toggle="modal" data-target="#tambah"><i class="btn btn-sm btn-primary shadow-sm">+ Tambah</i></a>
         </div>
         <div class="card-body">
           <div class="table-responsive">
@@ -107,7 +107,7 @@
                         <div class="col-4">
                             <div class="form-group">
                                 <label for="quantity">Jumlah</label>
-                                <input type="text" class="form-control @error('quantity') is-invalid @enderror" id="quantity" name="quantity[]" value="{{ old('quantity') }}" required>
+                                <input type="number" class="form-control @error('quantity') is-invalid @enderror" id="quantity" name="quantity[]" value="{{ old('quantity') }}" required>
                                 @error('quantity')
                                 <div class="invalid-feedback">
                                     {{$message}}

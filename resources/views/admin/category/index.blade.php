@@ -6,7 +6,7 @@
       <div class="card">
         <div class="card-header justify-content-between d-flex d-inline">
           <h4 class="card-title"> Kategori Produk</h4>
-          <a href="#" data-toggle="modal" data-target="#tambah"><i class="fas fa-plus"> Tambah</i></a>
+          <a href="#" data-toggle="modal" data-target="#tambah"><i class="btn btn-sm btn-primary shadow-sm">+ Tambah</i></a>
         </div>
         <div class="card-body">
           <div class="table-responsive">

@@ -5,33 +5,33 @@
         -->
       <div class="logo">
         <a href="http://www.creative-tim.com" class="simple-text logo-mini">
-          AK
+          
         </a>
         <a href="{{ route('home') }}" class="simple-text logo-normal">
-          Aplikasi Kasir
+          Rumah Shabby
         </a>
       </div>
       <div class="sidebar-wrapper" id="sidebar-wrapper">
         <ul class="nav">
-          <li class="active ">
+          <li class="nav-item {{ request()->is('kasir/dashboard') ?'active' : '' }}">
             <a href="{{ route('kasir.dashboard.index') }}">
               <i class="now-ui-icons design_app"></i>
               <p>Dashboard</p>
             </a>
           </li>
-          <li>
+          <li class="nav-item {{ request()->is('kasir/transaction') ?'active' : '' }}">
             <a href="{{ route('kasir.transaction.index') }}">
               <i class="now-ui-icons shopping_cart-simple"></i>
               <p>Transaksi</p>
             </a>
           </li>
-          <li>
+          <li class="nav-item {{ request()->is('kasir/report') ?'active' : '' }}">
             <a href="{{ route('kasir.report.index') }}">
               <i class="now-ui-icons education_paper"></i>
               <p>Laporan</p>
             </a>
           </li>
-          <li>
+          <li class="nav-item {{ request()->is('kasir/profile') ?'active' : '' }}">
             <a href="{{ route('kasir.profile.index') }}">
               <i class="now-ui-icons business_badge"></i>
               <p>Akun Saya</p>
