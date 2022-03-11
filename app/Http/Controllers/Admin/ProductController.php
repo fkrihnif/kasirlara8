@@ -71,10 +71,11 @@ class ProductController extends Controller
         return redirect()->back();
     }
 
-    public function print($id)
+    public function print(Request $request)
     {
-        $barcode = Product::find($id);
-        return view('admin.product.print', compact('barcode'));
+        $barcode = Product::find($request->id);
+        $banyak = $request->get('banyak');
+        return view('admin.product.print', compact('barcode', 'banyak'));
     }
 
     public function delete(Request $request)

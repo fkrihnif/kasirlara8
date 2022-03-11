@@ -9,17 +9,18 @@ use App\Models\Transaction;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
+
 class TransactionController extends Controller
 {
     public function index()
     {
-        $productTransactions = ProductTransaction::where('user_id', auth()->user()->id)->where('status','0')->get();
+        $productTransactions = ProductTransaction::where('user_id', auth()->user()->id)->where('status', '0')->get();
         $products = Product::all();
-        return view('admin.transaction.index', compact('productTransactions','products'));
+        return view('admin.transaction.index', compact('productTransactions', 'products'));
     }
     public function indexs()
     {
-        $productTransactions = ProductTransaction::where('user_id', auth()->user()->id)->where('status','0')->with('product')->get() ?? [];
+        $productTransactions = ProductTransaction::where('user_id', auth()->user()->id)->where('status', '0')->with('product')->get() ?? [];
         return response()->json([
             'message' => 'success',
             'data' => $productTransactions
@@ -35,7 +36,7 @@ class TransactionController extends Controller
                 'transaction_code' => $request->transaction_code,
                 'pay' => $request->pay,
             ]);
-            for($i = 0; $i < count($request->product); $i++){
+            for ($i = 0; $i < count($request->product); $i++) {
                 ProductTransaction::create([
                     'transaction_id' => $transaction->id,
                     'product_id' => $request->product_id[$i],
@@ -43,31 +44,30 @@ class TransactionController extends Controller
                 ]);
             }
             DB::commit();
-            return redirect()->back()->with('success','Berhasil menambah transaksi');
+            return redirect()->back()->with('success', 'Berhasil menambah transaksi');
         } catch (\Exception $e) {
             DB::rollback();
-            return redirect()->back()->with('alert','Gagal melakukan transaksi');
+            return redirect()->back()->with('alert', 'Gagal melakukan transaksi');
         }
-       
     }
     public function delete(Request $request)
     {
         $transaction = Transaction::find($request->id);
         $transaction->delete();
-        return redirect()->back()->with('success','Berhasil menghapus data transaksi');
+        return redirect()->back()->with('success', 'Berhasil menghapus data transaksi');
     }
     public function update(Request $request)
     {
         $transaction = Transaction::find($request->id);
         $transaction->update($request->all());
-        return redirect()->back()->with('success','Berhasil mengubah data transaksi');
+        return redirect()->back()->with('success', 'Berhasil mengubah data transaksi');
     }
-    
+
     public function show($id)
     {
         $transaction = Transaction::find($id);
         $product_transaction = ProductTransaction::where('transaction_id', $transaction->id)->get();
-        return view('admin.transaction.show', compact('transaction','product_transaction'));
+        return view('admin.transaction.show', compact('transaction', 'product_transaction'));
     }
     public function getProductCode(Request $request)
     {
@@ -81,21 +81,23 @@ class TransactionController extends Controller
     {
         $product = Product::where('product_code', $request->product_code)->first();
         DB::beginTransaction();
-        try{
-            $productTransaction = New ProductTransaction();
+        try {
+            $productTransaction = new ProductTransaction();
             $productTransaction->user_id = auth()->user()->id;
             $productTransaction->product_id = $product->id;
             $productTransaction->quantity = $request->quantity;
+            $productTransaction->disc_rp = $request->disc_rp;
+            $productTransaction->disc_prc = $request->disc_prc;
             $productTransaction->status = '0';
             $productTransaction->save();
-            $productTransaction = ProductTransaction::where('id',$productTransaction->id)->with('product')->first();
+            $productTransaction = ProductTransaction::where('id', $productTransaction->id)->with('product')->first();
 
             DB::commit();
             return response()->json([
                 'message' => 'success',
                 'data' => $productTransaction
             ]);
-        }catch(\Exception $e){
+        } catch (\Exception $e) {
             return response()->json([
                 'message' => 'failed',
             ], 500);
@@ -112,10 +114,10 @@ class TransactionController extends Controller
     }
     public function totalBuy()
     {
-        $productTransactions = ProductTransaction::where('user_id', auth()->user()->id)->where('status','0')->get() ?? [];
+        $productTransactions = ProductTransaction::where('user_id', auth()->user()->id)->where('status', '0')->get() ?? [];
         $total = [];
-        foreach($productTransactions as $product){
-            $total [] = $product->product->price * $product->quantity;
+        foreach ($productTransactions as $product) {
+            $total[] = $product->product->price * $product->quantity;
         }
         $totalBuy = array_sum($total);
         return response()->json([
@@ -127,11 +129,11 @@ class TransactionController extends Controller
     {
         DB::beginTransaction();
         try {
-            $productTransaction = ProductTransaction::where('user_id', auth()->user()->id)->where('status','0');
-            if(count($productTransaction->get())){
+            $productTransaction = ProductTransaction::where('user_id', auth()->user()->id)->where('status', '0');
+            if (count($productTransaction->get())) {
                 $purchaseOrder = [];
-                foreach($productTransaction->get() as $product) {
-                    $purchaseOrder [] = $product->product->price * $product->quantity;
+                foreach ($productTransaction->get() as $product) {
+                    $purchaseOrder[] = $product->product->price * $product->quantity;
                 }
                 $totalPurchase = array_sum($purchaseOrder);
                 $random = Str::random(10);
@@ -144,7 +146,7 @@ class TransactionController extends Controller
                 $transaction->purchase_order = $totalPurchase;
                 $transaction->customer_name = $request->customer_name ?? null;
                 $transaction->save();
-                
+
                 $productTransaction->update([
                     'transaction_id' => $transaction->id,
                     'status' => '1',
@@ -153,11 +155,11 @@ class TransactionController extends Controller
             }
             toast('Pembayaran berhasil')->autoClose(2000)->hideCloseButton();
             return redirect()->route('admin.report.show', $transaction->id);
-        }catch(\Exception $e ){
+        } catch (\Exception $e) {
             $var = response()->json([
                 'message' => 'failed',
                 'data' => $e
-            ],500);
+            ], 500);
         }
         return $var;
     }

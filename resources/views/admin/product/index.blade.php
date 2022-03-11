@@ -18,7 +18,7 @@
                 <th>
                   Kode Produk
                 </th>
-                <th>
+                <th style="width: 30%">
                   Nama
                 </th>
                 <th>
@@ -39,7 +39,6 @@
                   <tr>
                       <td>{{ $i++ }}</td>
                       <td>{{ $product->product_code }}
-                        <br> {!! DNS1D::getBarcodeHTML($product->product_code, 'UPCA') !!}
                     </td>
                       <td>{{ $product->name }}</td>
                       <td>{{ $product->quantity }}</td>
@@ -48,7 +47,7 @@
                           <a href="#" data-id="{{ $product->id }}" data-name="{{ $product->name }}"
                             data-code="{{ $product->product_code }}" data-quantity="{{ $product->quantity }}" data-price="{{ $product->price }}" data-price3="{{ $product->price3 }}" data-price6="{{ $product->price6 }}" data-category="{{ $product->category_id }}"  data-toggle="modal" data-target="#edit"><i class="fas fa-edit"></i></a>
                           <a href="#" data-target="#delete" data-toggle="modal" data-id="{{ $product->id }}"><i class="fas fa-trash"></i></a>
-                          <a href="{{ route('admin.product.printBarcode', $product->id) }}" target="_blank"><i class="fas fa-print"></i></a>
+                          <a href="#" data-id="{{ $product->id }}" data-toggle="modal" data-target="#print"><i class="fas fa-print"></i></a>
                       </td>
                   </tr>
                   @endforeach
@@ -188,6 +187,46 @@
     </div>
 </div>
 
+<div class="modal fade" id="print" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <form action="{{ route('admin.product.printBarcode') }}" method="POST">
+                @csrf
+                @method('PUT')
+                <input type="hidden" name="id">
+                <div class="modal-header">
+                    <h5 class="modal-title"><span>Print</span>Barcode</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+               
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="banyak">Berapa Stiker?</label>
+                        <select name="banyak" id="banyak">
+                            <option value="1">3</option>
+                            <option value="2">6</option>
+                            <option value="3">9</option>
+                            <option value="4">12</option>
+                            <option value="5">15</option>
+                            <option value="6">18</option>
+                            <option value="7">21</option>
+                            <option value="8">24</option>
+                            <option value="9">27</option>
+                            <option value="10">30</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
+                    <button type="submit" class="btn btn-primary">Simpan</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
 <div class="modal fade" id="tambah" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
 
     <div class="modal-dialog" role="document">
@@ -316,6 +355,12 @@
         var id = $(e.relatedTarget).data('id');
         console.log(id);
         $('#delete').find('input[name="id"]').val(id);
+    });
+
+    $("#print").on('show.bs.modal', (e) => {
+        var id = $(e.relatedTarget).data('id');
+
+        $('#print').find('input[name="id"]').val(id);
     });
 </script>
 @endpush
