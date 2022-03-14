@@ -53,6 +53,8 @@
                     <div class="col-3">
                         <label for="get_product_price">Harga</label>
                         <input type="text" id="get_product_price" disabled placeholder="Harga" class="form-control">
+                        <input type="hidden" id="get_product_price3" disabled class="form-control">
+                        <input type="hidden" id="get_product_price6" disabled class="form-control">
                     </div>
                     <div class="col-3">
                         <label for="get_product_total">Total Harga</label>
@@ -71,6 +73,7 @@
                                 <td>Nama Produk</td>
                                 <td>Jumlah</td>
                                 <td>Harga</td>
+                                <td>Diskon</td>
                                 <td>Total</td>
                                 <td>Aksi</td>
                             </tr>
@@ -129,11 +132,19 @@
                 success: function (response) {
                     $('tbody').html("");
                     $.each(response.data, function (key, item) {
+                    if (item.quantity>=1 && item.quantity<=2) {
+                        var harga = item.product.price;
+                    }else if(item.quantity>=3 && item.quantity<=5) {
+                        var harga = item.product.price3;
+                    }else if(item.quantity>=6) {
+                        var harga = item.product.price6;
+                    }
                     let content = `<tr>\
                         <td>${item.product.name}</td>\
                         <td>${item.quantity}</td>\
-                        <td>${item.product.price}</td>\
-                        <td>${item.quantity * item.product.price}</td>\
+                        <td>${harga}</td>\
+                        <td>${+item.disc_rp + ((item.disc_prc / 100) * (harga * item.quantity)) }</td>\
+                        <td>${item.quantity * harga - item.disc_rp - ((item.disc_prc / 100) * (harga * item.quantity))}</td>\
                         <td><button type="button" value="${item.id}" data-id="${item.id}" class="btn btn-danger delete-btn btn-sm">Hapus</button></td>\
                     \</tr>`
                     $('tbody').append(content);
@@ -172,11 +183,15 @@
                         }
                         $('#get_product_name').val(data.data.name);
                         $('#get_product_price').val(data.data.price);
+                        $('#get_product_price3').val(data.data.price3);
+                        $('#get_product_price6').val(data.data.price6);
                         $('#get_product_total').val(data.data.price);
                     },error:function(data){ 
                         $('#addToCart').prop('disabled', true);
                         $('#get_product_name').val('');
                         $('#get_product_price').val('');
+                        $('#get_product_price3').val('');
+                        $('#get_product_price6').val('');
                     }
                 });
         })
@@ -197,6 +212,8 @@
                         $('#get_product_code').val('');
                         $('#get_product_name').val('');
                         $('#get_product_price').val('');
+                        $('#get_product_price3').val('');
+                        $('#get_product_price6').val('');
                         $('#get_product_quantity').val('');
                         $('#get_product_disc_rp').val('');
                         $('#get_product_disc_prc').val('');
@@ -232,32 +249,43 @@
         const productQuantity = document.getElementById('get_product_quantity');
         const productDiscRp = document.getElementById('get_product_disc_rp');
         const productDiscPrc = document.getElementById('get_product_disc_prc');
+        
+        [productQuantity, productDiscRp, productDiscPrc].map(element => element.addEventListener('input', function(){        
+        let productPrice = document.getElementById('get_product_price');
+        let productPrice3 = document.getElementById('get_product_price3');
+        let productPrice6 = document.getElementById('get_product_price6');
+        let productTotal = document.getElementById('get_product_total');
+        if(productQuantity.value>=1 && productQuantity.value<=2) {
+                            productPrice.value=productPrice.value;
+                        }
+                        else if(productQuantity.value>=3 && productQuantity.value<=5){
+                            productPrice.value=productPrice3.value;
+                        }else if(productQuantity.value>=6){
+                            productPrice.value=productPrice6.value;
+                        }
+        let hasilDiscPrc = (productDiscPrc.value / 100) * (productPrice.value * productQuantity.value);
+        let total = productPrice.value * productQuantity.value - productDiscRp.value - hasilDiscPrc;
+        productTotal.value = total;
 
-        [productQuantity, productDiscRp, productDiscPrc].map(element => element.addEventListener('keyup', function(){        
-            let productPrice = document.getElementById('get_product_price');
-            let productTotal = document.getElementById('get_product_total');
-            let hasilDiscPrc = (productDiscPrc.value / 100) * (productPrice.value * productQuantity.value);
-            let total = productPrice.value * productQuantity.value - productDiscRp.value - hasilDiscPrc;
-            productTotal.value = total;
-            if($(this).val() == 0){
-                $('#addToCart').prop('disabled', true);
-            }else{
-                $('#addToCart').prop('disabled', false);
+        if($(this).val() = 0){
+            $('#addToCart').prop('disabled', true);
+        }else{
+            $('#addToCart').prop('disabled', false);
             }
         }))
 
-        [productQuantity, productDiscRp, productDiscPrc].map(element => element.addEventListener('change', function(){        
-            let productPrice = document.getElementById('get_product_price');
-            let productTotal = document.getElementById('get_product_total');
-            let hasilDiscPrc = (productDiscPrc.value / 100) * (productPrice.value * productQuantity.value);
-            let total = productPrice.value * productQuantity.value - productDiscRp.value - hasilDiscPrc;
-            productTotal.value = total;
-            if($(this).val() == 0){
-                $('#addToCart').prop('disabled', true);
-            }else{
-                $('#addToCart').prop('disabled', false);
-            }
-        }))
+        // productQuantity.addEventListener('change', function() {
+        //     let productPrice = document.getElementById('get_product_price');
+        //     let productTotal = document.getElementById('get_product_total');
+        //     let hasilDiscPrc = (productDiscPrc.value / 100) * (productPrice.value * productQuantity.value);
+        //     let total = productPrice.value * productQuantity.value - productDiscRp.value - hasilDiscPrc;
+        // productTotal.value = total;
+        //     if($(this).val() == 0){
+        //         $('#addToCart').prop('disabled', true);
+        //     }else{
+        //         $('#addToCart').prop('disabled', false);
+        //     }
+        // })
 
         function getTotalBuy(){
             $.ajax({

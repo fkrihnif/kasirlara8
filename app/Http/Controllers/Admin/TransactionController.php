@@ -92,6 +92,12 @@ class TransactionController extends Controller
             $productTransaction->save();
             $productTransaction = ProductTransaction::where('id', $productTransaction->id)->with('product')->first();
 
+            //quantity barang berkurang di table product saat addToCart 
+            $lessProduct = Product::where('id', $product->id)->first();
+            $quantity = Product::where('id', $product->id)->first()->quantity;
+            $lessProduct->quantity = $quantity - $request->quantity;
+            $lessProduct->save();
+
             DB::commit();
             return response()->json([
                 'message' => 'success',
@@ -106,7 +112,17 @@ class TransactionController extends Controller
     public function deleteCart(Request $request)
     {
         $cart = ProductTransaction::find($request->id);
+
+        //kembalikan quantity ke product saat delete cart
+        $getProduct = ProductTransaction::where('id', $request->id)->first()->product_id;
+        $getQuantity = ProductTransaction::where('id', $request->id)->first()->quantity;
+        $product = Product::where('id', $getProduct)->first();
+        $productQty = Product::where('id', $getProduct)->first()->quantity;
+        $product->quantity = $productQty + $getQuantity;
+        $product->save();
+
         $cart->delete();
+
         return response()->json([
             'message' => 'success',
             'data' => $cart
@@ -116,8 +132,17 @@ class TransactionController extends Controller
     {
         $productTransactions = ProductTransaction::where('user_id', auth()->user()->id)->where('status', '0')->get() ?? [];
         $total = [];
+
         foreach ($productTransactions as $product) {
-            $total[] = $product->product->price * $product->quantity;
+            //sesuaikan harga 1 3 6
+            if ($product->quantity >= 1 && $product->quantity < 3) {
+                $price = $product->product->price;
+            } else if ($product->quantity >= 3 && $product->quantity <= 5) {
+                $price = $product->product->price3;
+            } else if ($product->quantity >= 6) {
+                $price = $product->product->price6;
+            }
+            $total[] = $price * $product->quantity - ($product->disc_rp + ($product->disc_prc / 100) * ($price * $product->quantity));
         }
         $totalBuy = array_sum($total);
         return response()->json([
@@ -133,7 +158,16 @@ class TransactionController extends Controller
             if (count($productTransaction->get())) {
                 $purchaseOrder = [];
                 foreach ($productTransaction->get() as $product) {
-                    $purchaseOrder[] = $product->product->price * $product->quantity;
+                    //sesuaikan harga 1 3 6
+                    if ($product->quantity >= 1 && $product->quantity < 3) {
+                        $price = $product->product->price;
+                    } else if ($product->quantity >= 3 && $product->quantity <= 5) {
+                        $price = $product->product->price3;
+                    } else if ($product->quantity >= 6) {
+                        $price = $product->product->price6;
+                    }
+
+                    $purchaseOrder[] = $price * $product->quantity - ($product->disc_rp + ($product->disc_prc / 100) * ($price * $product->quantity));
                 }
                 $totalPurchase = array_sum($purchaseOrder);
                 $random = Str::random(10);

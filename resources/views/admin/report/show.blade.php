@@ -58,7 +58,7 @@
                 Jumlah
               </th>
               <th>
-                Harga
+                Hargaaa
               </th>
               <th>
                 Total
