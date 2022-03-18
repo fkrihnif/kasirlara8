@@ -16,14 +16,14 @@ class ProductSeeder extends Seeder
     {
         Product::create([
             'category_id' => '1',
-            'product_code' => '001',
+            'product_code' => '1000000',
             'name' => 'Tahu Bulat',
             'quantity' => '100',
             'price' => '2000',
         ]);
         Product::create([
             'category_id' => '2',
-            'product_code' => '002',
+            'product_code' => '1000001',
             'name' => 'Teh Hangat',
             'quantity' => '50',
             'price' => '3000',

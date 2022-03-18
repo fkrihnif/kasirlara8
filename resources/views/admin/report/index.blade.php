@@ -13,6 +13,7 @@
             <thead>
                 <th>No</th>
                 <th>Kode Transaksi</th>
+                <th>Online/Offline</th>
                 <th>Total Pembelian</th>
                 <th>Tanggal</th>
                 <th>Aksi</th>
@@ -22,6 +23,7 @@
                   <tr>
                       <td>{{ $key+1 }}</td>
                       <td>{{ $transaction->transaction_code }}</td>
+                      <td>{{ $transaction->method }}</td>
                       <td>{{ $transaction->purchase_order }}</td>
                       <td>{{ date('m-d-Y', strtotime($transaction->created_at)) }}</td>
                       <td>

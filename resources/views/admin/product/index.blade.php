@@ -76,7 +76,7 @@
                 <div class="modal-body">
                     <div class="form-group">
                         <label for="product_code">Kode Produk</label>
-                        <input type="text" class="form-control @error('product_code') is-invalid @enderror" id="product_code" name="product_code" required>
+                        <input type="text" class="form-control @error('product_code') is-invalid @enderror" id="product_code" name="product_code" disabled>
                         @error('product_code')
                         <div class="invalid-feedback">
                             {{$message}}
@@ -87,6 +87,20 @@
                         <label for="name">Nama</label>
                         <input type="text" class="form-control @error('name') is-invalid @enderror" id="name" name="name" required>
                         @error('name')
+                        <div class="invalid-feedback">
+                            {{$message}}
+                        </div>
+                        @enderror
+                    </div>
+                    <div class="form-group">
+                        <label for="category_id">Kategori Produk</label>
+                        <select name="category_id" id="category_id" class="custom-select @error('category_id') is-invalid @enderror">
+                            <option value="">~ Pilih Kategori Produk ~</option>
+                            @foreach($categories as $category)
+                                <option value="{{ $category->id }}">{{ $category->name }}</option>
+                            @endforeach
+                        </select>
+                        @error('category_id')
                         <div class="invalid-feedback">
                             {{$message}}
                         </div>
@@ -104,7 +118,7 @@
                     <div class="row input_fields_wrap">
                         <div class="col-4">
                             <div class="form-group">
-                                <label for="price">Harga</label>
+                                <label for="price">Harga 1</label>
                                 <input type="number" class="form-control @error('price') is-invalid @enderror" id="price" name="price" required>
                                 @error('price')
                                 <div class="invalid-feedback">
@@ -135,21 +149,6 @@
                                 @enderror
                             </div>
                         </div>
-                    </div>
-                
-                    <div class="form-group">
-                        <label for="category_id">Kategori Produk</label>
-                        <select name="category_id" id="category_id" class="custom-select @error('category_id') is-invalid @enderror">
-                            <option value="">~ Pilih Kategori Produk ~</option>
-                            @foreach($categories as $category)
-                                <option value="{{ $category->id }}">{{ $category->name }}</option>
-                            @endforeach
-                        </select>
-                        @error('category_id')
-                        <div class="invalid-feedback">
-                            {{$message}}
-                        </div>
-                        @enderror
                     </div>
              
                 </div>
@@ -243,8 +242,8 @@
                 <div class="modal-body">
 
                     <div class="form-group">
-                        <label for="product_code">Kode Produk</label>
-                        <input type="text" class="form-control @error('product_code') is-invalid @enderror" id="product_code" name="product_code" value="{{ old('product_code') }}" required>
+                        <label for="product_code">Kode Produk (Otomatis)</label>
+                        <input type="text" class="form-control @error('product_code') is-invalid @enderror" id="product_code" name="product_code" value="{{ old('product_code') }}" disabled>
                         @error('product_code')
                         <div class="invalid-feedback">
                             {{$message}}
@@ -255,6 +254,20 @@
                         <label for="name">Nama</label>
                         <input type="text" class="form-control @error('name') is-invalid @enderror" id="name" name="name" value="{{ old('name') }}" required>
                         @error('name')
+                        <div class="invalid-feedback">
+                            {{$message}}
+                        </div>
+                        @enderror
+                    </div>
+                    <div class="form-group">
+                        <label for="category_id">Kategori Produk</label>
+                        <select name="category_id" id="category_id" class="custom-select @error('category_id') is-invalid @enderror">
+                            <option value="">~ Pilih Kategori Produk ~</option>
+                            @foreach($categories as $category)
+                                <option value="{{ $category->id }}">{{ $category->name }}</option>
+                            @endforeach
+                        </select>
+                        @error('category_id')
                         <div class="invalid-feedback">
                             {{$message}}
                         </div>
@@ -303,21 +316,6 @@
                                 @enderror
                             </div>
                         </div>
-                    </div>
-                
-                    <div class="form-group">
-                        <label for="category_id">Kategori Produk</label>
-                        <select name="category_id" id="category_id" class="custom-select @error('category_id') is-invalid @enderror">
-                            <option value="">~ Pilih Kategori Produk ~</option>
-                            @foreach($categories as $category)
-                                <option value="{{ $category->id }}">{{ $category->name }}</option>
-                            @endforeach
-                        </select>
-                        @error('category_id')
-                        <div class="invalid-feedback">
-                            {{$message}}
-                        </div>
-                        @enderror
                     </div>
                 </div>
                 <div class="modal-footer">

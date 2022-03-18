@@ -170,15 +170,20 @@ class TransactionController extends Controller
                     $purchaseOrder[] = $price * $product->quantity - ($product->disc_rp + ($product->disc_prc / 100) * ($price * $product->quantity));
                 }
                 $totalPurchase = array_sum($purchaseOrder);
-                $random = Str::random(10);
+                $random = Str::random(7);
 
                 $transaction = new Transaction;
+                $last_id = $transaction->latest()->first()->id;
                 $transaction->user_id = auth()->user()->id;
-                $transaction->transaction_code = auth()->user()->id . $random;
+                $transaction->transaction_code = $last_id . $random;
                 $transaction->pay = $request->payment;
                 $transaction->return = $request->return;
                 $transaction->purchase_order = $totalPurchase;
                 $transaction->customer_name = $request->customer_name ?? null;
+                $transaction->account_number = $request->account_number;
+                $transaction->disc_total_rp = $request->get_total_disc_rp;
+                $transaction->disc_total_prc = $request->get_total_disc_prc;
+                $transaction->method = $request->method;
                 $transaction->save();
 
                 $productTransaction->update([

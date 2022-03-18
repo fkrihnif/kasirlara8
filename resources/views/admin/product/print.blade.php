@@ -8,81 +8,81 @@
    } 
 }
 
-  /* table {
-          margin-left: auto;
+  table {
+          /* margin-left: auto;
           margin-right: auto;
-          height: 100%;
+          height: 100%; */
           table-layout: fixed;
-        } */
+        }
 
 </style>
 
-<table border="1px">
+<table>
 
   @for ($i = 0; $i < $banyak; $i++)
   <tr>
     <td>
-      <table style="width: 50mm; height:18mm">
+      <table style="width: 50mm; height:20mm">
         <tr >
-          <td style="width:55%;">
+          <td style="width:55%">
             <?php 
-             echo DNS1D::getBarcodeSVG($barcode->product_code, 'UPCA',2,45);
+             echo DNS1D::getBarcodeSVG($barcode->product_code, 'UPCA',1.8,40);
             ?>
           </td>
           <td></td>
         </tr>
         <tr>
           <td>
-            {{ $barcode->name}} 
+            <p style="font-size: 13px">{{ $barcode->name}}</p>
           </td>
-          <td>
-            @currency($barcode->price) x1 <br>
+          <td><br>
+            <p style="font-size: 12px">@currency($barcode->price) x1 <br>
             @currency($barcode->price3) x3 <br>
-            @currency($barcode->price6) x6 
+            @currency($barcode->price6) x6 </p>
           </td>
         </tr>
       </table>
     </td>
     <td>
-      <table style="width: 50mm; height:18mm">
-        <tr >
+      <table style="width: 50mm; height:20mm">
+        <tr>
           <td style="width:55%;">
             <?php 
-             echo DNS1D::getBarcodeSVG($barcode->product_code, 'UPCA',2,45);
+             echo DNS1D::getBarcodeSVG($barcode->product_code, 'CODABAR',1.8,40);
             ?>
           </td>
           <td></td>
         </tr>
         <tr>
           <td>
-            {{ $barcode->name}} 
+            <p style="font-size: 13px">{{ $barcode->name}}</p>
           </td>
-          <td>
-            @currency($barcode->price) x1 <br>
+          <td><br>
+            <p style="font-size: 12px">@currency($barcode->price) x1 <br>
             @currency($barcode->price3) x3 <br>
-            @currency($barcode->price6) x6 
+            @currency($barcode->price6) x6 </p>
           </td>
         </tr>
       </table>
     </td>
     <td>
-      <table style="width: 50mm; height:18mm">
+      <table style="width: 50mm; height:20mm">
         <tr >
           <td style="width:55%;">
             <?php 
-             echo DNS1D::getBarcodeSVG($barcode->product_code, 'UPCA',2,45);
+             echo DNS1D::getBarcodeSVG($barcode->product_code, 'CODABAR',1.8,40);
             ?>
           </td>
           <td></td>
         </tr>
         <tr>
           <td>
-            {{ $barcode->name}} 
+            <p style="font-size: 13px">{{ $barcode->name}}</p>
           </td>
-          <td>
-            @currency($barcode->price) x1 <br>
+          <td><br>
+            <p style="font-size: 12px">@currency($barcode->price) x1 <br>
             @currency($barcode->price3) x3 <br>
-            @currency($barcode->price6) x6 
+            @currency($barcode->price6) x6 </p>
           </td>
         </tr>
       </table>

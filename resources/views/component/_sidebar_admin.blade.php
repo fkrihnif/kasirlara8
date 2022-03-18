@@ -8,7 +8,7 @@
           
         </a>
         <a href="{{ route('home') }}" class="simple-text logo-normal">
-          Rumah Shabby
+          {{ App\Models\Company::take(1)->first()->name }}
         </a>
       </div>
       <div class="sidebar-wrapper" id="sidebar-wrapper">

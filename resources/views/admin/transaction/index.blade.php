@@ -53,8 +53,9 @@
                     <div class="col-3">
                         <label for="get_product_price">Harga</label>
                         <input type="text" id="get_product_price" disabled placeholder="Harga" class="form-control">
-                        <input type="hidden" id="get_product_price3" disabled class="form-control">
-                        <input type="hidden" id="get_product_price6" disabled class="form-control">
+                        <input id="get_product_price3" disabled class="form-control" hidden>
+                        <input  id="get_product_price6" disabled class="form-control" hidden>
+                        <input  id="get_product_priceDe" disabled class="form-control" hidden>
                     </div>
                     <div class="col-3">
                         <label for="get_product_total">Total Harga</label>
@@ -94,11 +95,40 @@
             <div class="card-body">
                 <form action="{{ route('admin.transaction.pay') }}" method="post">
                     @csrf
-                    <div class="form-group" id="containerCustomer">
-                        <div class="justify-content-between d-flex d-inline">
-                            <label for="customer_name" id="l_customer_name">Nama Pembeli</label><i class="fas fa-eye" id="anonym"></i>
+                    <label>
+                        <input type="radio" name="method" id="method" value="offline" checked> Offline
+                    </label> |
+                    <label>
+                        <input type="radio" name="method" id="method" value="online"> Online
+                    </label>
+                    <a class="btn btn-primary btn-sm" data-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
+                        Kartu
+                    </a>
+                      <div class="collapse" id="collapseExample">
+                        <div class="card card-body">
+                            <div class="form-group">
+                                <label for="customer_name" id="l_customer_name">Bank/Nama</label>
+                                <input type="text" class="form-control" id="customer_name" name="customer_name" autocomplete="off">
+                            </div>
+                            <div class="form-group">
+                                <label for="account_number" id="account_number">Nomor Rek</label>
+                                <input type="text" class="form-control" id="account_number" name="account_number" autocomplete="off">
+                            </div>
                         </div>
-                        <input type="text" class="form-control" id="customer_name" name="customer_name">
+                      </div>
+                    <div class="row">
+                        <div class="col-6">
+                            <div class="form-group">
+                                <label for="get_total_disc_rp">Discount Rp</label>
+                                <input type="number" class="form-control" id="get_total_disc_rp" name="get_total_disc_rp">
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="form-group">
+                                <label for="get_total_disc_prc">Discount %</label>
+                                <input type="number" class="form-control" id="get_total_disc_prc" name="get_total_disc_rp">
+                            </div>
+                        </div>
                     </div>
                     <div class="form-group">
                         <label for="payment">Bayar</label>
@@ -185,6 +215,7 @@
                         $('#get_product_price').val(data.data.price);
                         $('#get_product_price3').val(data.data.price3);
                         $('#get_product_price6').val(data.data.price6);
+                        $('#get_product_priceDe').val(data.data.price);
                         $('#get_product_total').val(data.data.price);
                     },error:function(data){ 
                         $('#addToCart').prop('disabled', true);
@@ -192,6 +223,7 @@
                         $('#get_product_price').val('');
                         $('#get_product_price3').val('');
                         $('#get_product_price6').val('');
+                        $('#get_product_priceDe').val('');
                     }
                 });
         })
@@ -214,6 +246,7 @@
                         $('#get_product_price').val('');
                         $('#get_product_price3').val('');
                         $('#get_product_price6').val('');
+                        $('#get_product_priceDe').val('');
                         $('#get_product_quantity').val('');
                         $('#get_product_disc_rp').val('');
                         $('#get_product_disc_prc').val('');
@@ -254,9 +287,11 @@
         let productPrice = document.getElementById('get_product_price');
         let productPrice3 = document.getElementById('get_product_price3');
         let productPrice6 = document.getElementById('get_product_price6');
+        let productPriceDe = document.getElementById('get_product_priceDe');
         let productTotal = document.getElementById('get_product_total');
+
         if(productQuantity.value>=1 && productQuantity.value<=2) {
-                            productPrice.value=productPrice.value;
+                            productPrice.value=productPriceDe.value;
                         }
                         else if(productQuantity.value>=3 && productQuantity.value<=5){
                             productPrice.value=productPrice3.value;
@@ -274,19 +309,6 @@
             }
         }))
 
-        // productQuantity.addEventListener('change', function() {
-        //     let productPrice = document.getElementById('get_product_price');
-        //     let productTotal = document.getElementById('get_product_total');
-        //     let hasilDiscPrc = (productDiscPrc.value / 100) * (productPrice.value * productQuantity.value);
-        //     let total = productPrice.value * productQuantity.value - productDiscRp.value - hasilDiscPrc;
-        // productTotal.value = total;
-        //     if($(this).val() == 0){
-        //         $('#addToCart').prop('disabled', true);
-        //     }else{
-        //         $('#addToCart').prop('disabled', false);
-        //     }
-        // })
-
         function getTotalBuy(){
             $.ajax({
                 type: 'GET',
@@ -301,6 +323,7 @@
                 }
             })    
         }
+
         function formatRupiah(angka, prefix){
 			var number_string = angka.toString().replace(/[^,\d]/g, ''),
 			split   		= number_string.split(','),
@@ -313,28 +336,75 @@
 				separator = sisa ? '.' : '';
 				rupiah += separator + ribuan.join('.');
 			}
- 
 			rupiah = split[1] != undefined ? rupiah + ',' + split[1] : rupiah;
 			return prefix == undefined ? rupiah : (rupiah ? 'Rp. ' + rupiah : '');
 		}
-        let anonym = document.getElementById('anonym');
-        anonym.addEventListener('click', function(e) {
-        let containerCustomer = document.getElementById('customer_name');
-        let lContainerCustomer = document.getElementById('l_customer_name');
-            if(this.classList.contains('fa-eye')) {
-                this.classList.remove('fa-eye');
-                this.classList.add('fa-eye-slash');
-                containerCustomer.style.display = 'none';
-                lContainerCustomer.style.display = 'none';
-            }else{
-                this.classList.add('fa-eye');
-                this.classList.remove('fa-eye-slash');
-                containerCustomer.style.display = 'block';
-                lContainerCustomer.style.display = 'block';
-            }
-        })
-        let payment = document.getElementById('payment');
-        payment.addEventListener('keyup', function() {
+
+        // const productQuantity = document.getElementById('get_product_quantity');
+
+
+        const totalDiscRp = document.getElementById('get_total_disc_rp');
+        const totalDiscPrc = document.getElementById('get_total_disc_prc');
+        const totalPayment = document.getElementById('payment');
+        [totalDiscRp, totalDiscPrc, totalPayment].map(element => element.addEventListener('input', function(){  
+            $.ajax({
+                type: 'GET',
+                url: '{{ route('admin.transaction.totalBuy') }}',
+                dataType: 'json',
+                success: function(data){
+                    let totalBuy = document.getElementById('totalBuy');
+                    totalBuy.innerHTML = "Total " + formatDiskon(data.data, 'Rp. ');
+                },
+                error: function(data){
+                    console.log('gagal');
+                }
+            })  
+        }))
+
+        function formatDiskon(angka, prefix){
+            
+            var number = angka;
+            let diskon = document.getElementById('get_total_disc_rp');
+            let diskonPrc = document.getElementById('get_total_disc_prc');
+            var totalDscPrc = (diskonPrc.value / 100) * (number);
+            var totalDsc = number-diskon.value-totalDscPrc ;
+            var format = totalDsc.toString().replace(/[^,\d]/g, ''),
+            split   		= format.split(','),
+			sisa     		= split[0].length % 3,
+			rupiah     		= split[0].substr(0, sisa),
+			ribuan     		= split[0].substr(sisa).match(/\d{3}/gi);
+ 
+			// tambahkan titik jika yang di input sudah menjadi angka ribuan
+			if(ribuan){
+				separator = sisa ? '.' : '';
+				rupiah += separator + ribuan.join('.');
+			}
+			rupiah = split[1] != undefined ? rupiah + ',' + split[1] : rupiah;
+			return prefix == undefined ? rupiah : (rupiah ? 'Rp. ' + rupiah : '');
+		}
+
+        // let payment = document.getElementById('payment');
+        // payment.addEventListener('keyup', function() {
+        //     let tPayment = document.getElementById('tPayment');
+        //     let vReturn = document.getElementById('return');
+        //     let totalBuy = document.getElementById('totalBuy');
+        //     let split = totalBuy.innerHTML.split(' ');
+        //     if(split[2] == 0){
+        //         alert('Belum ada pesanan');
+        //     }
+        //     let result = parseInt(this.value) - split[2].replace('.','') ;
+        //     if(result >= 0) {
+        //         tPayment.disabled = false;
+        //     }else{
+        //         tPayment.disabled = true;
+        //     }
+        //     vReturn.value = result;
+        // })
+
+        const disc1 = document.getElementById('get_total_disc_rp');
+        const disc2 = document.getElementById('get_total_disc_prc');
+        const payment = document.getElementById('payment');
+        [payment, disc1, disc2].map(element => element.addEventListener('keyup', function(){  
             let tPayment = document.getElementById('tPayment');
             let vReturn = document.getElementById('return');
             let totalBuy = document.getElementById('totalBuy');
@@ -342,14 +412,34 @@
             if(split[2] == 0){
                 alert('Belum ada pesanan');
             }
-            let result = parseInt(this.value) - split[2].replace('.','') ;
+            let result = parseInt(payment.value) - split[2].replace('.','');
             if(result >= 0) {
                 tPayment.disabled = false;
             }else{
                 tPayment.disabled = true;
             }
             vReturn.value = result;
-        })
+        }))
+
+        // let diskonRupiah = document.getElementById('get_total_disc_rp');
+        // diskonRupiah.addEventListener('keyup', function() {
+           
+        //     let tPayment = document.getElementById('tPayment');
+        //     let vReturn = document.getElementById('return');
+        //     let totalBuy = document.getElementById('totalBuy');
+        //     let split = totalBuy.innerHTML.split(' ');
+        //     console.log(split[2].replace('.',''));
+        //     if(split[2] == 0){
+        //         alert('Belum ada pesanan');
+        //     }
+        //     let result = parseInt(payment.value) - split[2].replace('.','') ;
+        //     if(result >= 0) {
+        //         tPayment.disabled = false;
+        //     }else{
+        //         tPayment.disabled = true;
+        //     }
+        //     vReturn.value = result;
+        // })
     })     
   </script>
 @endpush
