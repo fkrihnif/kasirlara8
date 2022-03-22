@@ -170,15 +170,33 @@ class TransactionController extends Controller
                     $purchaseOrder[] = $price * $product->quantity - ($product->disc_rp + ($product->disc_prc / 100) * ($price * $product->quantity));
                 }
                 $totalPurchase = array_sum($purchaseOrder);
-                $random = Str::random(7);
+                $totalDiscPercent = ($request->get_total_disc_prc / 100) * $totalPurchase;
+                $totalPurchaseFinal = $totalPurchase - $request->get_total_disc_rp - $totalDiscPercent ;
 
                 $transaction = new Transaction;
-                $last_id = $transaction->latest()->first()->id;
+                //utk membuat kode unik penjualan
+                $characters = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+                $charactersNumber = strlen($characters);
+                $codeLength = 6;
+            
+                $code = '';
+            
+                while (strlen($code) < 6) {
+                    $position = rand(0, $charactersNumber - 1);
+                    $character = $characters[$position];
+                    $code = $code.$character;
+                }
+            
+                if (Transaction::where('transaction_code', $code)->exists()) {
+                    $this->generateUniqueCode();
+                }
+                
                 $transaction->user_id = auth()->user()->id;
-                $transaction->transaction_code = $last_id . $random;
+                $transaction->transaction_code = $code;
                 $transaction->pay = $request->payment;
                 $transaction->return = $request->return;
-                $transaction->purchase_order = $totalPurchase;
+                $transaction->totalSementara = $totalPurchase;
+                $transaction->purchase_order = $totalPurchaseFinal;
                 $transaction->customer_name = $request->customer_name ?? null;
                 $transaction->account_number = $request->account_number;
                 $transaction->disc_total_rp = $request->get_total_disc_rp;
@@ -196,7 +214,7 @@ class TransactionController extends Controller
             return redirect()->route('admin.report.show', $transaction->id);
         } catch (\Exception $e) {
             $var = response()->json([
-                'message' => 'failed',
+                'message' => 'failed oii',
                 'data' => $e
             ], 500);
         }

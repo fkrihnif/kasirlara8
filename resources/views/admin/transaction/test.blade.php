@@ -126,7 +126,7 @@
                         <div class="col-6">
                             <div class="form-group">
                                 <label for="get_total_disc_prc">Discount %</label>
-                                <input type="number" class="form-control" id="get_total_disc_prc" name="get_total_disc_prc">
+                                <input type="number" class="form-control" id="get_total_disc_prc" name="get_total_disc_rp">
                             </div>
                         </div>
                     </div>
@@ -401,28 +401,25 @@
         //     vReturn.value = result;
         // })
 
-        const disc1 = document.getElementById('get_total_disc_rp');
-        const disc2 = document.getElementById('get_total_disc_prc');
-        const payment = document.getElementById('payment');
-        [payment, disc1, disc2].map(element => element.addEventListener('keyup', function(){  
-            let tPayment = document.getElementById('tPayment');
-            let vReturn = document.getElementById('return');
-            let totalBuy = document.getElementById('totalBuy');
-            let split = totalBuy.innerHTML.split(' ');
-            if(split[2] == 0){
-                alert('Belum ada pesanan');
-            }
-            let split1 = split[2].replace('.','');
-            let split2 = split1.replace('.','');
-
-            let result = parseInt(payment.value) - split2;
-            if(result >= 0) {
-                tPayment.disabled = false;
-            }else{
-                tPayment.disabled = true;
-            }
-            vReturn.value = result;
-        }))
+        // const disc1 = document.getElementById('get_total_disc_rp');
+        // const disc2 = document.getElementById('get_total_disc_prc');
+        // const payment = document.getElementById('payment');
+        // [payment, disc1, disc2].map(element => element.addEventListener('keyup', function(){  
+        //     let tPayment = document.getElementById('tPayment');
+        //     let vReturn = document.getElementById('return');
+        //     let totalBuy = document.getElementById('totalBuy');
+        //     let split = totalBuy.innerHTML.split(' ');
+        //     if(split[2] == 0){
+        //         alert('Belum ada pesanan');
+        //     }
+        //     let result = parseInt(payment.value) - split[2].replace('.','');
+        //     if(result >= 0) {
+        //         tPayment.disabled = false;
+        //     }else{
+        //         tPayment.disabled = true;
+        //     }
+        //     vReturn.value = result;
+        // }))
 
         // let diskonRupiah = document.getElementById('get_total_disc_rp');
         // diskonRupiah.addEventListener('keyup', function() {

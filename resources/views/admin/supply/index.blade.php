@@ -94,7 +94,7 @@
                                 <label for="product_id">Nama Barang</label>
                                 <select name="product_id[]" id="product_id" class="custom-select" required>
                                     @foreach($products as $product)
-                                        <option value="{{ $product->id }}">{{ $product->name }}</option>
+                                        <option value="{{ $product->id }}">{{ $product->product_code }}</option>
                                     @endforeach
                                 </select>
                                 @error('product_id')
@@ -185,7 +185,7 @@
                                     <label for="product_id">Nama Barang</label>
                                     <select name="product_id[]" id="product_id" class="custom-select" required>
                                         @foreach($products as $product)
-                                            <option value="{{ $product->id }}">{{ $product->name }}</option>
+                                            <option value="{{ $product->id }}">{{ $product->product_code }}</option>
                                         @endforeach
                                     </select>
                                     @error('product_id')

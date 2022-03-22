@@ -20,6 +20,8 @@ class ProductSeeder extends Seeder
             'name' => 'Tahu Bulat',
             'quantity' => '100',
             'price' => '2000',
+            'price3' => '1900',
+            'price6' => '1800',
         ]);
         Product::create([
             'category_id' => '2',
@@ -27,6 +29,8 @@ class ProductSeeder extends Seeder
             'name' => 'Teh Hangat',
             'quantity' => '50',
             'price' => '3000',
+            'price3' => '1900',
+            'price6' => '1800',
         ]);
     }
 }

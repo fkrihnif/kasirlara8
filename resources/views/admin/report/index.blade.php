@@ -24,8 +24,8 @@
                       <td>{{ $key+1 }}</td>
                       <td>{{ $transaction->transaction_code }}</td>
                       <td>{{ $transaction->method }}</td>
-                      <td>{{ $transaction->purchase_order }}</td>
-                      <td>{{ date('m-d-Y', strtotime($transaction->created_at)) }}</td>
+                      <td>{{ format_uang($transaction->purchase_order) }}</td>
+                      <td>{{ date('d-m-Y', strtotime($transaction->created_at)) }}</td>
                       <td>
                           <a href="{{ route('admin.report.show', $transaction->id) }}"><i class="fas fa-eye"></i></a>
                           <a href="#" data-target="#delete" data-toggle="modal" data-id="{{ $transaction->id }}"><i class="fas fa-trash"></i></a>

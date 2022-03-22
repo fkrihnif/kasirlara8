@@ -21,19 +21,23 @@
 
   @for ($i = 0; $i < $banyak; $i++)
   <tr>
-    <td>
+    <td style="height: 20mm">
       <table style="width: 50mm; height:20mm">
         <tr >
           <td style="width:55%">
             <?php 
-             echo DNS1D::getBarcodeSVG($barcode->product_code, 'UPCA',1.8,40);
+             echo DNS1D::getBarcodeSVG($barcode->product_code, 'CODABAR',1.8,40);
             ?>
           </td>
           <td></td>
         </tr>
         <tr>
           <td>
-            <p style="font-size: 13px">{{ $barcode->name}}</p>
+            <p style="font-size: 13px">
+              @php
+                  echo substr($barcode->name,0,45);
+              @endphp
+              </p>
           </td>
           <td><br>
             <p style="font-size: 12px">@currency($barcode->price) x1 <br>
@@ -55,7 +59,11 @@
         </tr>
         <tr>
           <td>
-            <p style="font-size: 13px">{{ $barcode->name}}</p>
+            <p style="font-size: 13px">
+              @php
+                  echo substr($barcode->name,0,45);
+              @endphp
+              </p>
           </td>
           <td><br>
             <p style="font-size: 12px">@currency($barcode->price) x1 <br>
@@ -77,7 +85,11 @@
         </tr>
         <tr>
           <td>
-            <p style="font-size: 13px">{{ $barcode->name}}</p>
+            <p style="font-size: 13px">
+              @php
+                  echo substr($barcode->name,0,45);
+              @endphp
+              </p>
           </td>
           <td><br>
             <p style="font-size: 12px">@currency($barcode->price) x1 <br>

@@ -91,7 +91,7 @@
     <div class="col-md-6">
         <div class="card">
             <div class="card-header ">
-                <i class="now-ui-icons loader_refresh spin"></i> &nbsp; 5 transaksi terbaru
+                <i class="now-ui-icons loader_refresh spin"></i> &nbsp; Transaksi Penjualan Hari Ini : 
             </div>
             <div class="card-body ">
                 <table class="table table-bordered">
@@ -99,31 +99,70 @@
                         <tr>
                             <th>Kode Transaksi</th>
                             <th>Total Pembelian</th>
-                            <th>Aksi</th>
                         </tr>
                     </thead>
                     <tbody>
+                        @php
+                            $purchaseOrder = [];
+                        @endphp
                         @foreach($transactionGet as $transaction)
                         <tr>
-                            <td>{{ $transaction->transaction_code }}</td>
-                            <td>{{ $transaction->purchase_order }}</td>
-                            <td>
-                                <a href="{{ route('admin.report.show', $transaction->id) }}"><i class="fas fa-eye"></i></a>
-                            </td>
+                            <td>{{ $transaction->transaction_code }}  <a href="{{ route('admin.report.show', $transaction->id) }}"><i class="fas fa-eye"></i></a></td>
+                            <td>{{ format_uang($transaction->purchase_order)  }}</td>
                         </tr>
+                        @php
+                            $purchaseOrder[] = $transaction->purchase_order;
+                        @endphp
                         @endforeach
+                        <tr>
+                            @php
+                                $totalPurchase = array_sum($purchaseOrder);
+                            @endphp
+                            <p>Total Keseluruhan: {{ format_uang($totalPurchase)  }}</p>
+                        </tr>
                     </tbody>
                 </table>
             </div>
         </div>
     </div>
-    <div class="col-md-6 col-sm-12">
+    {{-- <div class="col-md-6 col-sm-12">
         <div class="card">
             <div class="card-header">
                 <i class="now-ui-icons loader_refresh spin"></i> &nbsp; 5 Produk Terlaris
             </div>
             <div class="card-body">        
                 <canvas id="myChart" width="400" height="400"></canvas>
+            </div>
+        </div>
+    </div> --}}
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header ">
+                <i class="now-ui-icons loader_refresh spin"></i> &nbsp; Transaksi Pembelian Hari Ini : 
+            </div>
+            <div class="card-body ">
+                <table class="table table-bordered">
+                    <thead>
+                      <th>
+                        Nama Pemasok
+                      </th>
+                      <th>
+                        Tanggal Pasok
+                      </th>
+                      <th>
+                        Total Produk
+                      </th>
+                    </thead>
+                    <tbody>
+                        @foreach($supplierToday as $key => $supply)
+                        <tr>
+                            <td>{{ $supply->supplier_name }}</td>
+                            <td>{{ $supply->supply_date }}</td>
+                            <td>{{ $supply->productSupply()->count() }}    <a href="{{ route('admin.supply.show', $supply->id) }}"><i class="fas fa-eye"></i></a></td>
+                        </tr>
+                        @endforeach
+                    </tbody>
+                  </table>
             </div>
         </div>
     </div>
@@ -136,7 +175,7 @@
 <script>
     const ctx = document.getElementById('myChart').getContext('2d');
     const myChart = new Chart(ctx, {
-        type: 'bar',
+        type: 'line',
         data: {
             labels: {!! json_encode($result['product']) !!},
             datasets: [{

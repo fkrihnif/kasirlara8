@@ -10,6 +10,7 @@ use App\Models\Supply;
 use App\Models\Transaction;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Carbon;
 
 class DashboardController extends Controller
 {
@@ -21,7 +22,15 @@ class DashboardController extends Controller
         $products = Product::count();
         $supplies = Supply::count();
         $getProducts = Product::all();
-        $transactionGet = Transaction::take(5)->latest()->get();
+        $transactionGet = Transaction::whereDate('created_at', date('Y-m-d'))->get();
+      
+        //data pembelian hari ini
+        $supplierToday = Supply::whereDate('created_at', date('Y-m-d'))->get();
+
+
+
+
+        //barang terlaris (semua) tapi chart dan tdk dipakai
         $totalProduct = [];
         $nameProduct = [];
         $cek = Product::with('productTransactions')->get();
@@ -37,6 +46,6 @@ class DashboardController extends Controller
             'total' => $totalProduct,
             'product' => $nameProduct
         ];
-        return view('admin.dashboard.index', compact('transactions','categories','products','supplies','transactionGet','result'));
+        return view('admin.dashboard.index', compact('transactions','categories','products','supplies','transactionGet','result', 'supplierToday'));
     }
 }

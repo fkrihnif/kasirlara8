@@ -23,7 +23,12 @@
                   <tr>
                     <td>Tanggal</td>
                     <td> : </td>
-                    <td> {{ date('m-d-Y', strtotime($transaction->created_at)) }}</td>
+                    <td> {{ date('d-m-Y', strtotime($transaction->created_at)) }}</td>
+                  </tr>
+                  <tr>
+                    <td>Kasir</td>
+                    <td> : </td>
+                    <td> {{ $transaction->user->name }}</td>
                   </tr>
                 </table>
               </div>
@@ -31,14 +36,26 @@
                 <div class="container-fluid">
                   <table>
                     <tr>
-                      <td>Kasir</td>
-                      <td> : </td>
-                      <td> {{ $transaction->user->name }}</td>
+                      <td> {{ $transaction->method}}</td>
                     </tr>
                     <tr>
-                      <td>Nama Pelanggan</td>
+                      <td>Pembayaran</td>
                       <td> : </td>
-                      <td>{{ $transaction->customer_name ?? '' }}</td>
+                      <td>@if ($transaction->customer_name != null or $transaction->account_number != null)
+                          Kartu Kredit
+                          @else
+                          Tunai
+                        @endif
+                      </td>
+                    </tr>
+                    <tr>
+                      @if ($transaction->customer_name != null or $transaction->account_number != null)
+                        <td>ATM</td>
+                        <td> : </td>
+                        <td>{{ $transaction->customer_name ?? '' }} 
+                         | {{ $transaction->account_number ?? '' }}
+                        </td>
+                      @endif
                     </tr>
                   </table>
                 </div>
@@ -58,7 +75,10 @@
                 Jumlah
               </th>
               <th>
-                Hargaaa
+                Harga
+              </th>
+              <th>
+                Discount
               </th>
               <th>
                 Total
@@ -67,23 +87,48 @@
             <tbody>
                 @foreach($productTransactions as $key => $product)
                 <tr>
-                    <td>{{ $key+1 }}</td>
-                    <td>{{ $product->product->name }}</td>
-                    <td>{{ $product->quantity }}</td>
-                    <td>{{ $product->product->price }}</td>
-                    <td>{{ $product->product->price * $product->quantity }}</td>
-                </tr>
+                  <td>{{ $key+1 }}</td>
+                  <td>{{ $product->product->name }}</td>
+                  <td>{{ $product->quantity }}</td>
+                  @php
+                      if ($product->quantity >= 1 && $product->quantity<=2) {
+                        $price = $product->product->price;
+                      } elseif ($product->quantity >= 3 && $product->quantity<=5) {
+                        $price = $product->product->price3;
+                      } elseif ($product->quantity >= 6) {
+                        $price = $product->product->price6;
+                      }
+                  @endphp
+                  <td>{{ $price }}</td>
+                  @php
+                      $discountItem = $product->disc_rp + (($product->disc_prc/100) * ($price * $product->quantity));
+                  @endphp
+                  <td>{{ $discountItem }}</td>
+                  <td>{{ format_uang(($price * $product->quantity)- $discountItem) }}</td>
+              </tr>
                 @endforeach
                 <tr>
-                  <td colspan="4" align="right"><b>Total Pembelian</b></td>
+                  <td colspan="5" align="right"><b>Total</b></td>
+                  <td>{{ format_uang($transaction->totalSementara)  }}</td>
+                </tr>
+                <tr>
+                  <td colspan="5" align="right"><b>Discount</b></td>
+                  @php
+                      $discPercent = ($transaction->disc_total_prc / 100) * $transaction->totalSementara;
+                      $discount = $discPercent + $transaction->disc_total_rp;
+                  @endphp
+                  <td>{{ format_uang($discount)  }}</td>
+                </tr>
+                <tr>
+                  <td colspan="5" align="right"><b>Total Pembelian akhir</b></td>
                   <td>{{ format_uang($transaction->purchase_order) }}</td>
                 </tr>
                 <tr>
-                  <td colspan="4" align="right"><b>Bayar</b></td>
+                  <td colspan="5" align="right"><b>Bayar</b></td>
                   <td>{{ format_uang($transaction->pay) }}</td>
                 </tr>
                 <tr>
-                  <td colspan="4" align="right"><b>Kembalian</b></td>
+                  <td colspan="5" align="right"><b>Kembalian</b></td>
                   <td>{{ format_uang($transaction->return) }}</td>
                 </tr>
             </tbody>

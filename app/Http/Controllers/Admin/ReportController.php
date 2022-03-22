@@ -12,7 +12,7 @@ class ReportController extends Controller
 {
     public function index()
     {
-        $transactions = Transaction::all();
+        $transactions = Transaction::orderBy('id', 'DESC')->get();
         return view('admin.report.index', compact('transactions'));
     }
     public function show($id)

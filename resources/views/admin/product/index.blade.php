@@ -42,7 +42,7 @@
                     </td>
                       <td>{{ $product->name }}</td>
                       <td>{{ $product->quantity }}</td>
-                      <td>{{ $product->price }} | {{ $product->price3 }} | {{ $product->price6 }}</td>
+                      <td>@currency($product->price) x1 <br> @currency($product->price3) x3 <br> @currency($product->price6) x6</td>
                       <td>
                           <a href="#" data-id="{{ $product->id }}" data-name="{{ $product->name }}"
                             data-code="{{ $product->product_code }}" data-quantity="{{ $product->quantity }}" data-price="{{ $product->price }}" data-price3="{{ $product->price3 }}" data-price6="{{ $product->price6 }}" data-category="{{ $product->category_id }}"  data-toggle="modal" data-target="#edit"><i class="fas fa-edit"></i></a>

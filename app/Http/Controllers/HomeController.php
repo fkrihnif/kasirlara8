@@ -30,12 +30,17 @@ class HomeController extends Controller
     public function index()
     {
         $transactions = Transaction::count();
-        $transactionGet = Transaction::take(3)->latest()->get();
         $transactions = Transaction::count();
         $categories = Category::count();
         $products = Product::count();
         $supplies = Supply::count();
         $getProducts = Product::all();
+        $transactionGet = Transaction::whereDate('created_at', date('Y-m-d'))->get();
+      
+        //data pembelian hari ini
+        $supplierToday = Supply::whereDate('created_at', date('Y-m-d'))->get();
+
+        //barang terlaris (semua) tapi chart dan tdk dipakai
         $totalProduct = [];
         $nameProduct = [];
         $cek = Product::with('productTransactions')->get();
@@ -53,9 +58,9 @@ class HomeController extends Controller
         ];
         if(auth()->user()->role == 'admin'){
             
-            return view('admin.dashboard.index', compact('transactions','categories','products','supplies','transactionGet','result'));
+            return view('admin.dashboard.index', compact('transactions','categories','products','supplies','transactionGet','result', 'supplierToday'));
         } else {
-            return view('kasir.dashboard.index', compact('transactions','categories','products','supplies','transactionGet','result'));
+            return view('kasir.dashboard.index', compact('transactions','categories','products','supplies','transactionGet','result', 'supplierToday'));
         }
     }
 }
