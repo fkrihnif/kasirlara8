@@ -162,6 +162,7 @@ return [
         Illuminate\Validation\ValidationServiceProvider::class,
         Illuminate\View\ViewServiceProvider::class,
         Milon\Barcode\BarcodeServiceProvider::class, //milon barcode
+        Barryvdh\DomPDF\ServiceProvider::class, //domPDF
 
         /*
          * Package Service Providers...
@@ -233,6 +234,8 @@ return [
         //milon barcode
         'DNS1D' => Milon\Barcode\Facades\DNS1DFacade::class,
         'DNS2D' => Milon\Barcode\Facades\DNS2DFacade::class,
+        //domPDF
+        'PDF' => Barryvdh\DomPDF\Facade::class,
 
     ],
 
