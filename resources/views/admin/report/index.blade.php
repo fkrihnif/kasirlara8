@@ -8,30 +8,64 @@
           <h4 class="card-title"> Laporan Transaksi</h4>
         </div>
         <div class="card-body">
+            <form action="{{ route('admin.report.index') }}">
+            
+            <div class="row">
+                    <div class="col-4">
+                        <label for="from_date">Dari Tanggal</label>
+                        <input type="date" id="from_date" name="from_date" value="{{Request::get('from_date')}}" class="form-control">
+                    </div>
+                    <div class="col-4">
+                        <label for="to_date">Hingga Tanggal</label>
+                        <input type="date" id="to_date" name="to_date" value="{{Request::get('to_date')}}" class="form-control">
+                    </div>
+                    <div class="col-4">
+                        <div class="col-4" style="margin-top: 10px;">
+                            <input type="submit" value="Cari" class="btn btn-primary text-white">
+                        </div>
+                    </div>
+            </div>
+            </form>
+            <form action="{{ route('admin.report.index') }}">
+                <input type="submit" value="Semua Data" class="btn btn-warning text-white">
+            </form>
+
           <div class="table-responsive">
             <table class="table table-bordered" id="dataTable">
             <thead>
                 <th>No</th>
                 <th>Kode Transaksi</th>
                 <th>Online/Offline</th>
-                <th>Total Pembelian</th>
+                <th>Total Penjualan</th>
                 <th>Tanggal</th>
                 <th>Aksi</th>
             </thead>
               <tbody>
+                @php
+                $totalOrder = [];
+                @endphp
                   @foreach($transactions as $key => $transaction)
                   <tr>
                       <td>{{ $key+1 }}</td>
                       <td>{{ $transaction->transaction_code }}</td>
                       <td>{{ $transaction->method }}</td>
                       <td>{{ format_uang($transaction->purchase_order) }}</td>
-                      <td>{{ date('d-m-Y', strtotime($transaction->created_at)) }}</td>
+                      <td>{{ date('d-m-Y H:i:s', strtotime($transaction->created_at)) }}</td>
                       <td>
                           <a href="{{ route('admin.report.show', $transaction->id) }}"><i class="fas fa-eye"></i></a>
                           <a href="#" data-target="#delete" data-toggle="modal" data-id="{{ $transaction->id }}"><i class="fas fa-trash"></i></a>
                       </td>
                   </tr>
+                  @php
+                  $totalOrder[] = $transaction->purchase_order;
+                  @endphp
                   @endforeach
+                  <tr>
+                    @php
+                    $total = array_sum($totalOrder);
+                    @endphp
+                    <p>Total Keseluruhan: {{ format_uang($total)  }}</p>
+                  </tr>
               </tbody>
             </table>
           </div>

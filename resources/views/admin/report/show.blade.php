@@ -23,7 +23,7 @@
                   <tr>
                     <td>Tanggal</td>
                     <td> : </td>
-                    <td> {{ date('d-m-Y', strtotime($transaction->created_at)) }}</td>
+                    <td> {{ date('d-m-Y H:i:s', strtotime($transaction->created_at)) }}</td>
                   </tr>
                   <tr>
                     <td>Kasir</td>

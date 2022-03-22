@@ -8,10 +8,15 @@
           <h4 class="card-title"> Detail Pasok</h4><hr>
           <div class="card-title">
             <table>
+              <tr>
+                <td>Kode Pasok</td>
+                <td>:</td>
+                <td> &nbsp; {{ $supply->code }}</td>
+              </tr>
                 <tr>
                     <td>Nama Pemasok</td>
                     <td>:</td>
-                    <td> &nbsp; {{ $supply->user->name }}</td>
+                    <td> &nbsp; {{ $supply->supplier_name }}</td>
                 </tr>
                 <tr>
                     <td>Total Produk</td>
@@ -29,7 +34,7 @@
         <hr>
         <div class="card-body">
           <div class="table-responsive">
-            <table class="table table-bordered" id="dataTable">
+            <table class="table table-bordered">
               <thead>
                 <th>
                   No
@@ -40,15 +45,36 @@
                 <th>
                   Jumlah
                 </th>
+                <th>
+                  Harga Satuan
+                </th>
+                <th>
+                  Total
+                </th>
               </thead>
               <tbody>
+                @php
+                    $total = [];
+                @endphp
                   @foreach($product_supplies as $key => $product)
                   <tr>
-                      <th>{{ $key+1 }}</th>
-                      <th>{{ $product->product->name }}</th>
-                      <th>{{ $product->quantity }}</th>
+                      <td>{{ $key+1 }}</th>
+                      <td>{{ $product->product->name }}</td>
+                      <td>{{ $product->quantity }}</td>
+                      <td>{{ format_uang($product->price)  }}</td>
+                      <td>{{ format_uang($product->quantity * $product->price) }}</td>
                   </tr>
+                  @php
+                      $total[] =  $product->quantity * $product->price;
+                  @endphp
                   @endforeach
+                  <tr>
+                    @php
+                        $totalFinal = array_sum($total);
+                    @endphp
+                    <td colspan="4" align="right"><b>Total Akhir</b></td>
+                    <td>{{ format_uang($totalFinal)  }}</td>
+                  </tr>
               </tbody>
             </table>
           </div>

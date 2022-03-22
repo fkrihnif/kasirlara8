@@ -10,9 +10,22 @@ use Illuminate\Http\Request;
 
 class ReportController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $transactions = Transaction::orderBy('id', 'DESC')->get();
+        $fromDate = $request->get('from_date');
+        $toDate = $request->get('to_date');
+        if ($fromDate) {
+            $transactions = Transaction::whereRaw(
+                "(created_at >= ? AND created_at <= ?)", 
+                [
+                   $fromDate ." 00:00:00", 
+                   $toDate ." 23:59:59"
+                ]
+              )->get();
+        } else {
+            $transactions = Transaction::orderBy('id', 'DESC')->get();
+        }
+        
         return view('admin.report.index', compact('transactions'));
     }
     public function show($id)

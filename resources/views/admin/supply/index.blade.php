@@ -9,11 +9,35 @@
           <a href="#" data-toggle="modal" data-target="#tambah"><i class="btn btn-sm btn-primary shadow-sm">+ Tambah</i></a>
         </div>
         <div class="card-body">
+            <form action="{{ route('admin.supply.index') }}">
+            
+                <div class="row">
+                        <div class="col-4">
+                            <label for="from_date">Dari Tanggal</label>
+                            <input type="date" id="from_date" name="from_date" value="{{Request::get('from_date')}}" class="form-control">
+                        </div>
+                        <div class="col-4">
+                            <label for="to_date">Hingga Tanggal</label>
+                            <input type="date" id="to_date" name="to_date" value="{{Request::get('to_date')}}" class="form-control">
+                        </div>
+                        <div class="col-4">
+                            <div class="col-4" style="margin-top: 10px;">
+                                <input type="submit" value="Cari" class="btn btn-primary text-white">
+                            </div>
+                        </div>
+                </div>
+                </form>
+                <form action="{{ route('admin.supply.index') }}">
+                    <input type="submit" value="Semua Data" class="btn btn-warning text-white">
+                </form>
           <div class="table-responsive">
             <table class="table table-bordered" id="dataTable">
               <thead>
                 <th>
                   No
+                </th>
+                <th>
+                    Kode
                 </th>
                 <th>
                   Nama Pemasok
@@ -22,7 +46,10 @@
                   Tanggal Pasok
                 </th>
                 <th>
-                  Total Produk
+                  Total Item
+                </th>
+                <th>
+                    Total harga
                 </th>
                 <th>
                   Aksi
@@ -32,9 +59,11 @@
                   @foreach($supplies as $key => $supply)
                   <tr>
                       <td>{{ $key+1 }}</td>
+                      <td>{{ $supply->code }}</td>
                       <td>{{ $supply->supplier_name }}</td>
                       <td>{{ $supply->supply_date }}</td>
                       <td>{{ $supply->productSupply()->count() }}</td>
+                      <td>{{ format_uang($supply->total)  }}</td>
                       <td>
                           <a href="{{ route('admin.supply.show', $supply->id) }}"><i class="fas fa-eye"></i></a>
                           <a href="#" data-target="#delete" data-toggle="modal" data-id="{{ $supply->id }}"><i class="fas fa-trash"></i></a>
@@ -74,9 +103,9 @@
 </div>
 
 
-<div class="modal fade" id="tambah" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
+<div class="modal fade bd-example-modal-lg" id="tambah" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
 
-    <div class="modal-dialog" role="document">
+    <div class="modal-dialog modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <form action="{{ route('admin.supply.store') }}" method="POST">
                 @csrf
@@ -89,7 +118,7 @@
                 </div>
                 <div class="modal-body">
                     <div class="row input_fields_wrap">
-                        <div class="col-4">
+                        <div class="col-3">
                             <div class="form-group">
                                 <label for="product_id">Nama Barang</label>
                                 <select name="product_id[]" id="product_id" class="custom-select" required>
@@ -104,7 +133,7 @@
                                 @enderror
                             </div>
                         </div>
-                        <div class="col-4">
+                        <div class="col-3">
                             <div class="form-group">
                                 <label for="quantity">Jumlah</label>
                                 <input type="number" class="form-control @error('quantity') is-invalid @enderror" id="quantity" name="quantity[]" value="{{ old('quantity') }}" required>
@@ -115,7 +144,18 @@
                                 @enderror
                             </div>
                         </div>
-                        <div class="col-4">
+                        <div class="col-3">
+                            <div class="form-group">
+                                <label for="price">Harga Satuan</label>
+                                <input type="number" class="form-control @error('price') is-invalid @enderror" id="price" name="price[]" value="{{ old('price') }}" required>
+                                @error('price')
+                                <div class="invalid-feedback">
+                                    {{$message}}
+                                </div>
+                                @enderror
+                            </div>
+                        </div>
+                        <div class="col-3">
                             <button type="button" id="tambahKolom" class="btn btn-primary add_field_button" style="margin-top: 27px;">Tambah</button>
                         </div>
                     </div>
@@ -168,7 +208,7 @@
         $('#delete').find('input[name="id"]').val(id);
     });
     $(document).ready(function() {
-        var max_fields      = 10; //maximum input boxes allowed
+        var max_fields      = 50; //maximum input boxes allowed
         var wrapper         = $(".input_fields_wrap"); //Fields wrapper
         var add_button      = $(".add_field_button"); //Add button ID
 
@@ -180,7 +220,7 @@
                 $(wrapper).append(`
                     <div class="container">
                         <div class="row input_fields_wrap">
-                            <div class="col-4">
+                            <div class="col-3">
                                 <div class="form-group">
                                     <label for="product_id">Nama Barang</label>
                                     <select name="product_id[]" id="product_id" class="custom-select" required>
@@ -195,10 +235,10 @@
                                     @enderror
                                 </div>
                             </div>
-                            <div class="col-4">
+                            <div class="col-3">
                                 <div class="form-group">
                                     <label for="quantity">Jumlah</label>
-                                    <input type="text" class="form-control @error('quantity') is-invalid @enderror" id="quantity" name="quantity[]" value="{{ old('quantity') }}" required>
+                                    <input type="number" class="form-control @error('quantity') is-invalid @enderror" id="quantity" name="quantity[]" value="{{ old('quantity') }}" required>
                                     @error('quantity')
                                     <div class="invalid-feedback">
                                         {{$message}}
@@ -206,7 +246,18 @@
                                     @enderror
                                 </div>
                             </div>
-                            <div class="col-4">
+                            <div class="col-3">
+                                <div class="form-group">
+                                    <label for="price">Harga Satuan</label>
+                                    <input type="number" class="form-control @error('price') is-invalid @enderror" id="price" name="price[]" value="{{ old('price') }}" required>
+                                    @error('price')
+                                    <div class="invalid-feedback">
+                                        {{$message}}
+                                    </div>
+                                    @enderror
+                                </div>
+                            </div>
+                            <div class="col-3">
                                 <button type="button" class="btn btn-primary remove_field" style="margin-top: 27px;">Hapus</button>
                             </div>
                         </div>
