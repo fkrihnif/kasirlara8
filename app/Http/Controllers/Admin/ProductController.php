@@ -14,6 +14,7 @@ class ProductController extends Controller
         $products = Product::orderBy('id', 'DESC')->get();
         $categories = Category::all();
         return view('admin.product.index', compact('products', 'categories'));
+        //testing bismillah
     }
     public function store(Request $request)
     {
