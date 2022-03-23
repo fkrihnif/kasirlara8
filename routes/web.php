@@ -70,6 +70,7 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'isAdmin'])->group(f
         Route::put('update', [SupplyController::class, 'update'])->name('update');
         Route::delete('delete', [SupplyController::class, 'delete'])->name('delete');
         Route::get('show/{id}', [SupplyController::class, 'show'])->name('show');
+        Route::get('print/{id}', [SupplyController::class, 'print'])->name('print');
     });
     Route::prefix('transaction')->name('transaction.')->group(function () {
         Route::get('', [TransactionController::class, 'index'])->name('index');

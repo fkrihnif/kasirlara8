@@ -56,12 +56,18 @@
                 </th>
               </thead>
               <tbody>
+                  @php
+                      $totalBuy = [];
+                  @endphp
                   @foreach($supplies as $key => $supply)
                   <tr>
                       <td>{{ $key+1 }}</td>
                       <td>{{ $supply->code }}</td>
                       <td>{{ $supply->supplier_name }}</td>
-                      <td>{{ $supply->supply_date }}</td>
+                      @php
+                            $date = \Carbon\Carbon::parse($supply->supply_date)->format('d-m-Y');
+                      @endphp
+                      <td>{{ $date }}</td>
                       <td>{{ $supply->productSupply()->count() }}</td>
                       <td>{{ format_uang($supply->total)  }}</td>
                       <td>
@@ -69,7 +75,16 @@
                           <a href="#" data-target="#delete" data-toggle="modal" data-id="{{ $supply->id }}"><i class="fas fa-trash"></i></a>
                       </td>
                   </tr>
+                  @php
+                  $totalBuy[] = $supply->total;
+                  @endphp
                   @endforeach
+                  
+                    @php
+                    $total = array_sum($totalBuy);
+                    @endphp
+                    <p>Total Keseluruhan: {{ format_uang($total)  }}</p>
+                  
               </tbody>
             </table>
           </div>

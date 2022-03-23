@@ -60,12 +60,12 @@
                   $totalOrder[] = $transaction->purchase_order;
                   @endphp
                   @endforeach
-                  <tr>
+                  
                     @php
                     $total = array_sum($totalOrder);
                     @endphp
                     <p>Total Keseluruhan: {{ format_uang($total)  }}</p>
-                  </tr>
+                  
               </tbody>
             </table>
           </div>

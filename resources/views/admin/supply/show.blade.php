@@ -7,6 +7,7 @@
         <div class="card-header">
           <h4 class="card-title"> Detail Pasok</h4><hr>
           <div class="card-title">
+            <a href="{{ route('admin.supply.print', $supply->id) }}" target="_blank"><i class="fas fa-print"></i></a>
             <table>
               <tr>
                 <td>Kode Pasok</td>
@@ -26,7 +27,10 @@
                 <tr>
                     <td>Tanggal Pasok</td>
                     <td>:</td>
-                    <td> &nbsp; {{ $supply->supply_date }}</td>
+                    @php
+                    $date = \Carbon\Carbon::parse($supply->supply_date)->format('d-m-Y');
+                    @endphp
+                    <td> &nbsp; {{ $date }}</td>
                 </tr>
                 </table>
             </div>

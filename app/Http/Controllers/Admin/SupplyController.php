@@ -104,4 +104,47 @@ class SupplyController extends Controller
         $product_supplies = ProductSupply::where('supply_id', $supply->id)->get();
         return view('admin.supply.show', compact('supply','product_supplies'));
     }
+
+    public function print(Request $request)
+    {
+        $supply = Supply::find($request->id);
+        $product_supplies = ProductSupply::where('supply_id', $supply->id)->get();
+
+        foreach($product_supplies as $key => $product) {
+        $name[] = $product->product->name;
+        $code[] = $product->product->product_code;
+        $price[] = $product->product->price;
+        $price3[] = $product->product->price3;
+        $price6[] = $product->product->price6;
+        $print[] = $product->quantity;
+        }
+        $result = [
+            'name' => $name,
+            'code' => $code,
+            'price' => $price,
+            'price3' => $price3,
+            'price6' => $price6,
+            'print' => $print
+        ];
+
+        $data = [];
+        for ($i = 0; $i < count($name); $i++) {
+        $data[] = [
+            'name' => $name[$i],
+            'code' => $code[$i],
+            'price' => $price[$i],
+            'price3' => $price3[$i],
+            'price6' => $price6[$i],
+            'code' => $code[$i],
+            ];
+        $quantity[] = [
+            'qty' => $print[$i],
+        ];
+        }
+
+        dd($data);
+        
+
+        return view('admin.supply.print', compact('supply', 'product_supplier'));
+    }
 }
