@@ -138,13 +138,24 @@ class SupplyController extends Controller
             'code' => $code[$i],
             ];
         $quantity[] = [
-            'qty' => $print[$i],
+            'qty' => (int)$print[$i],
         ];
         }
-
-        dd($data);
         
+        for($i=0; $i<count($quantity);$i++) {
+            // echo $quantity[$i]['qty'];
+            for($j = 1; $j<= $quantity[$i]['qty']; $j++){
+                $jumlah[] = [ 
+                    'nama' => $data[$i]['name'],
+                    'kode' => $data[$i]['code'],
+                    'harga' => $data[$i]['price'],
+                    'harga3' => $data[$i]['price3'],
+                    'harga6' => $data[$i]['price6'],
+                    'kuanKe' => $j,
+                ];
+            }
+        };
 
-        return view('admin.supply.print', compact('supply', 'product_supplier'));
+        return view('admin.supply.print', compact('supply', 'product_supplies', 'jumlah', 'quantity'));
     }
 }

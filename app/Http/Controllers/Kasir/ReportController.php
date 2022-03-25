@@ -11,7 +11,7 @@ class ReportController extends Controller
 {
     public function index()
     {
-        $transactions = Transaction::all();
+        $transactions = Transaction::where('user_id', auth()->user()->id)->get();
         return view('kasir.report.index', compact('transactions'));
     }
     public function show($id)
@@ -25,13 +25,5 @@ class ReportController extends Controller
         $transaction = Transaction::find($id);
         $productTransactions = ProductTransaction::where('transaction_id', $transaction->id)->get();
         return view('kasir.report.print', compact('transaction','productTransactions'));
-    }
-    public function delete(Request $request)
-    {
-        $transaction = Transaction::find($request->id);
-        $transaction->delete();
-        toast('Laporan transaksi berhasil dihapus')->autoClose(2000)->hideCloseButton();
-        return redirect()->back();
-
     }
 }

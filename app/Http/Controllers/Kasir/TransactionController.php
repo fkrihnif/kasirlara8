@@ -12,7 +12,7 @@ use Illuminate\Support\Str;
 class TransactionController extends Controller
 {
     public function index()
-    {
+    { 
         $productTransactions = ProductTransaction::where('user_id', auth()->user()->id)->where('status','0')->get();
         $products = Product::all();
         return view('kasir.transaction.index', compact('productTransactions','products'));
@@ -81,21 +81,29 @@ class TransactionController extends Controller
     {
         $product = Product::where('product_code', $request->product_code)->first();
         DB::beginTransaction();
-        try{
-            $productTransaction = New ProductTransaction();
+        try {
+            $productTransaction = new ProductTransaction();
             $productTransaction->user_id = auth()->user()->id;
             $productTransaction->product_id = $product->id;
             $productTransaction->quantity = $request->quantity;
+            $productTransaction->disc_rp = $request->disc_rp;
+            $productTransaction->disc_prc = $request->disc_prc;
             $productTransaction->status = '0';
             $productTransaction->save();
-            $productTransaction = ProductTransaction::where('id',$productTransaction->id)->with('product')->first();
+            $productTransaction = ProductTransaction::where('id', $productTransaction->id)->with('product')->first();
+
+            //quantity barang berkurang di table product saat addToCart 
+            $lessProduct = Product::where('id', $product->id)->first();
+            $quantity = Product::where('id', $product->id)->first()->quantity;
+            $lessProduct->quantity = $quantity - $request->quantity;
+            $lessProduct->save();
 
             DB::commit();
             return response()->json([
                 'message' => 'success',
                 'data' => $productTransaction
             ]);
-        }catch(\Exception $e){
+        } catch (\Exception $e) {
             return response()->json([
                 'message' => 'failed',
             ], 500);
@@ -104,6 +112,14 @@ class TransactionController extends Controller
     public function deleteCart(Request $request)
     {
         $cart = ProductTransaction::find($request->id);
+        //kembalikan quantity ke product saat delete cart
+        $getProduct = ProductTransaction::where('id', $request->id)->first()->product_id;
+        $getQuantity = ProductTransaction::where('id', $request->id)->first()->quantity;
+        $product = Product::where('id', $getProduct)->first();
+        $productQty = Product::where('id', $getProduct)->first()->quantity;
+        $product->quantity = $productQty + $getQuantity;
+        $product->save();
+
         $cart->delete();
         return response()->json([
             'message' => 'success',
@@ -112,10 +128,19 @@ class TransactionController extends Controller
     }
     public function totalBuy()
     {
-        $productTransactions = ProductTransaction::where('user_id', auth()->user()->id)->where('status','0')->get() ?? [];
+        $productTransactions = ProductTransaction::where('user_id', auth()->user()->id)->where('status', '0')->get() ?? [];
         $total = [];
-        foreach($productTransactions as $product){
-            $total [] = $product->product->price * $product->quantity;
+
+        foreach ($productTransactions as $product) {
+            //sesuaikan harga 1 3 6
+            if ($product->quantity >= 1 && $product->quantity < 3) {
+                $price = $product->product->price;
+            } else if ($product->quantity >= 3 && $product->quantity <= 5) {
+                $price = $product->product->price3;
+            } else if ($product->quantity >= 6) {
+                $price = $product->product->price6;
+            }
+            $total[] = $price * $product->quantity - ($product->disc_rp + ($product->disc_prc / 100) * ($price * $product->quantity));
         }
         $totalBuy = array_sum($total);
         return response()->json([
@@ -127,24 +152,56 @@ class TransactionController extends Controller
     {
         DB::beginTransaction();
         try {
-            $productTransaction = ProductTransaction::where('user_id', auth()->user()->id)->where('status','0');
-            if(count($productTransaction->get())){
+            $productTransaction = ProductTransaction::where('user_id', auth()->user()->id)->where('status', '0');
+            if (count($productTransaction->get())) {
                 $purchaseOrder = [];
-                foreach($productTransaction->get() as $product) {
-                    $purchaseOrder [] = $product->product->price * $product->quantity;
+                foreach ($productTransaction->get() as $product) {
+                    //sesuaikan harga 1 3 6
+                    if ($product->quantity >= 1 && $product->quantity < 3) {
+                        $price = $product->product->price;
+                    } else if ($product->quantity >= 3 && $product->quantity <= 5) {
+                        $price = $product->product->price3;
+                    } else if ($product->quantity >= 6) {
+                        $price = $product->product->price6;
+                    }
+
+                    $purchaseOrder[] = $price * $product->quantity - ($product->disc_rp + ($product->disc_prc / 100) * ($price * $product->quantity));
                 }
                 $totalPurchase = array_sum($purchaseOrder);
-                $random = Str::random(10);
+                $totalDiscPercent = ($request->get_total_disc_prc / 100) * $totalPurchase;
+                $totalPurchaseFinal = $totalPurchase - $request->get_total_disc_rp - $totalDiscPercent ;
 
                 $transaction = new Transaction;
+                //utk membuat kode unik penjualan
+                $characters = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+                $charactersNumber = strlen($characters);
+                $codeLength = 6;
+            
+                $code = '';
+            
+                while (strlen($code) < 6) {
+                    $position = rand(0, $charactersNumber - 1);
+                    $character = $characters[$position];
+                    $code = $code.$character;
+                }
+            
+                if (Transaction::where('transaction_code', $code)->exists()) {
+                    $this->generateUniqueCode();
+                }
+                
                 $transaction->user_id = auth()->user()->id;
-                $transaction->transaction_code = auth()->user()->id . $random;
+                $transaction->transaction_code = $code;
                 $transaction->pay = $request->payment;
                 $transaction->return = $request->return;
-                $transaction->purchase_order = $totalPurchase;
+                $transaction->totalSementara = $totalPurchase;
+                $transaction->purchase_order = $totalPurchaseFinal;
                 $transaction->customer_name = $request->customer_name ?? null;
+                $transaction->account_number = $request->account_number;
+                $transaction->disc_total_rp = $request->get_total_disc_rp;
+                $transaction->disc_total_prc = $request->get_total_disc_prc;
+                $transaction->method = $request->method;
                 $transaction->save();
-                
+
                 $productTransaction->update([
                     'transaction_id' => $transaction->id,
                     'status' => '1',
@@ -153,11 +210,11 @@ class TransactionController extends Controller
             }
             toast('Pembayaran berhasil')->autoClose(2000)->hideCloseButton();
             return redirect()->route('kasir.report.show', $transaction->id);
-        }catch(\Exception $e ){
+        } catch (\Exception $e) {
             $var = response()->json([
-                'message' => 'failed',
+                'message' => 'failed oii',
                 'data' => $e
-            ],500);
+            ], 500);
         }
         return $var;
     }

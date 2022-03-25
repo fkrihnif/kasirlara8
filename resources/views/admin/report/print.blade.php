@@ -1,34 +1,47 @@
 <style>
-  td{
-    padding-right: 100px;
-  }
   p{
     font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
-    font-size: 23px;
   }
+
+  @media print 
+{
+    @page {
+      width: 56mm;
+      margin:0;
+    }
+    html, body {
+        width: 56mm;
+        background: #FFF;
+        overflow:visible;
+    }
+    body {
+        padding-top:0mm;
+    }
+}
 
 </style>
 <table>
   <tr>
-    <td><p>{{ App\Models\Company::take(1)->first()->name }}</p></td>
+    <td style=" width: 58mm; overflow: hidden; display: inline-block; white-space: nowrap;">
+      <div style="text-align: center; font-size: 55%;">
+        {{ App\Models\Company::take(1)->first()->name }}
+      </div>
+     <div style="text-align: center; font-size: 55%;">
+        {{ App\Models\Company::take(1)->first()->address }}
+     </div>
+     <div style="text-align: center; font-size: 55%;">
+      Kasir : {{ $transaction->user->name }}
+    </div>
+    <div style="text-align: center; font-size: 55%;">
+      Tanggal : {{ date('d-m-Y', strtotime($transaction->created_at)) }}
+    </div>
+  </td>
   </tr>
-  <tr>
-    <td><p>{{ App\Models\Company::take(1)->first()->address }}</p></td>
-  </tr>
-  <tr>
-    <td><p>Kasir : {{ $transaction->user->name }}</p></td>
-  </tr>
-  <tr>
-    <td><p>Tanggal : {{ date('d-m-Y', strtotime($transaction->created_at)) }}</p></td>
-  </tr>
+  
 </table>
-{{-- <p style="font-size: 25px">{{ App\Models\Company::take(1)->first()->name }}</p>
-<p style="font-size: 25px">{{ App\Models\Company::take(1)->first()->address }}</p>
-<p style="font-size: 25px">Kasir : {{ $transaction->user->name }}</p>
-<p style="font-size: 25px">Tanggal : {{ date('m-d-Y', strtotime($transaction->created_at)) }}</p> --}}
 ================================================================
 
-<table>
+<table border="1px" style="width: 55mm">
   @foreach ($productTransactions as $product)
   <tr>
     <td><p>{{ \Illuminate\Support\Str::limit($product->product->name, 25, $end='.') }}</p></td>
@@ -77,3 +90,8 @@
 </table>
 =============================================================<br>
 <p>Terimakasih telah berbelanja. Semoga harimu menyenangkan</p>
+<p>Barang yang sudah dibeli tidak dapat dikembalikan</p>
+
+<script type="text/javascript">
+  window.onload = function() { window.print(); }
+</script>

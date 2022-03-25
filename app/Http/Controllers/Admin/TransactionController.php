@@ -72,6 +72,7 @@ class TransactionController extends Controller
     public function getProductCode(Request $request)
     {
         $product = Product::where('product_code', $request->search)->first() ?? '';
+
         return response()->json([
             'message' => 'success',
             'data' => $product

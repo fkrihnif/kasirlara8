@@ -345,8 +345,7 @@
 
         const totalDiscRp = document.getElementById('get_total_disc_rp');
         const totalDiscPrc = document.getElementById('get_total_disc_prc');
-        const totalPayment = document.getElementById('payment');
-        [totalDiscRp, totalDiscPrc, totalPayment].map(element => element.addEventListener('input', function(){  
+        [totalDiscRp, totalDiscPrc].map(element => element.addEventListener('input', function(){  
             $.ajax({
                 type: 'GET',
                 url: '{{ route('admin.transaction.totalBuy') }}',
@@ -354,6 +353,7 @@
                 success: function(data){
                     let totalBuy = document.getElementById('totalBuy');
                     totalBuy.innerHTML = "Total " + formatDiskon(data.data, 'Rp. ');
+                    hitung();
                 },
                 error: function(data){
                     console.log('gagal');
@@ -400,11 +400,12 @@
         //     }
         //     vReturn.value = result;
         // })
+        var payment = document.getElementById('payment');
+        [payment].map(element => element.addEventListener('input', function(){  
+            hitung();
+        }))
 
-        const disc1 = document.getElementById('get_total_disc_rp');
-        const disc2 = document.getElementById('get_total_disc_prc');
-        const payment = document.getElementById('payment');
-        [payment, disc1, disc2].map(element => element.addEventListener('keyup', function(){  
+        function hitung() {
             let tPayment = document.getElementById('tPayment');
             let vReturn = document.getElementById('return');
             let totalBuy = document.getElementById('totalBuy');
@@ -414,7 +415,6 @@
             }
             let split1 = split[2].replace('.','');
             let split2 = split1.replace('.','');
-
             let result = parseInt(payment.value) - split2;
             if(result >= 0) {
                 tPayment.disabled = false;
@@ -422,7 +422,7 @@
                 tPayment.disabled = true;
             }
             vReturn.value = result;
-        }))
+        }
 
         // let diskonRupiah = document.getElementById('get_total_disc_rp');
         // diskonRupiah.addEventListener('keyup', function() {

@@ -64,10 +64,26 @@
                     <td>{{ $key+1 }}</td>
                     <td>{{ $product->product->name }}</td>
                     <td>{{ $product->quantity }}</td>
-                    <td>{{ $product->product->price }}</td>
-                    <td>{{ $product->product->price * $product->quantity }}</td>
+                    @php
+                        if ($product->quantity >= 1 && $product->quantity<=2) {
+                          $price = $product->product->price;
+                        } elseif ($product->quantity >= 3 && $product->quantity<=5) {
+                          $price = $product->product->price3;
+                        } elseif ($product->quantity >= 6) {
+                          $price = $product->product->price6;
+                        }
+                    @endphp
+                    <td>{{ $price }}</td>
+                    <td>{{ $price * $product->quantity }}</td>
                 </tr>
                 @endforeach
+                <tr>
+                  <td colspan="4" align="right"><b>Total Pembelian</b></td>
+                  @php
+                      $totalBeforeDisc = $transaction->purchase_order + $transaction->disc_total_rp;
+                  @endphp
+                  <td>{{ format_uang($totalBeforeDisc)  }}</td>
+                </tr>
                 <tr>
                   <td colspan="4" align="right"><b>Total Pembelian</b></td>
                   <td>{{ format_uang($transaction->purchase_order) }}</td>
