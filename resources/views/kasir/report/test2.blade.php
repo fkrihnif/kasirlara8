@@ -71,19 +71,12 @@ th.price {
                 @endif </div>
             
             <table>
-                <thead>
-                    <tr style="  border-top: 1px solid black;
-                    border-collapse: collapse;">
-                        <th class="quantity">Qty</th>
-                        <th class="description">Barang</th>
-                        <th class="price">Harga</th>
-                    </tr>
-                </thead>
+        
                 <tbody>
+                    
 
                     @foreach ($productTransactions as $product)
-                    <tr style="  border-top: 1px solid black;
-                    border-collapse: collapse;">
+                    <tr>
                         @php
                         if ($product->quantity >= 1 && $product->quantity<=2) {
                           $price = $product->product->price;
@@ -95,11 +88,12 @@ th.price {
                    
                        $discountItem = $product->disc_rp + (($product->disc_prc/100) * ($price * $product->quantity));
                        @endphp
-                        <td class="quantity" style="font-size: 90%">{{ $product->quantity }}x{{ $price }}</td>
-                        <td class="description">{{ \Illuminate\Support\Str::limit($product->product->name, 40, $end='.') }} <div style="font-size: 70%;">({{$product->product->product_code}})</div>
+                        <td class="description" colspan="2" style="width: 35mm; max-width:35mm;">{{ \Illuminate\Support\Str::limit($product->product->name, 40, $end='.') }} <div style="font-size: 70%;">({{$product->product->product_code}})</div>
+                      
+                        <div style="font-size: 90%">{{ $product->quantity }} x @ {{ format_uang($price)  }}</div>
                         @if ($product->disc_rp != null || $product->disc_prc != null)
-                            <div style="font-size: 70%"> - disc {{$discountItem}}</div>
-                        @endif
+                            <div style="font-size: 70%"> - disc {{format_uang($discountItem)}}</div>
+                        @endif <div></div>
                         </td>
                         <td class="price" style="font-size: 90%">{{ format_uang(($price * $product->quantity)- $discountItem) }}</td>
                     </tr>

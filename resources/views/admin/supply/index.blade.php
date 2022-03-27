@@ -69,7 +69,7 @@
                       @endphp
                       <td>{{ $date }}</td>
                       <td>{{ $supply->productSupply()->count() }}</td>
-                      <td>{{ format_uang($supply->total)  }}</td>
+                      <td>@currency($supply->total)</td>
                       <td>
                           <a href="{{ route('admin.supply.show', $supply->id) }}"><i class="fas fa-eye"></i></a>
                           <a href="#" data-target="#delete" data-toggle="modal" data-id="{{ $supply->id }}"><i class="fas fa-trash"></i></a>
@@ -83,7 +83,7 @@
                     @php
                     $total = array_sum($totalBuy);
                     @endphp
-                    <p>Total Keseluruhan: {{ format_uang($total)  }}</p>
+                    <p>Total Keseluruhan: @currency($total)</p>
                   
               </tbody>
             </table>

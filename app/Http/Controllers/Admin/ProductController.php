@@ -31,8 +31,8 @@ class ProductController extends Controller
         // ]);
 
         $product = new Product();
-        $last_barcode = $product->latest()->first()->product_code;
-        $product->product_code = $last_barcode + 1;
+        $max_barcode = $product->max('product_code');
+        $product->product_code = $max_barcode + 1;
         $product->name = $request->get('name');
         $product->quantity = $request->get('quantity');
         $product->price = $request->get('price');

@@ -65,9 +65,17 @@
             }
             echo $tampil;
           ?>
-                <div style="margin: auto; width: 81.5%;">
+                {{-- <div style="margin: auto; width: 81.5%;"> --}}
+                  <div style="margin: auto; text-align:center;">
                   <?php 
-                    echo DNS1D::getBarcodeSVG($jumlah[$i]['kode'], 'CODABAR',1.7,40);
+                    if (strlen($jumlah[$i]['kode']) >=1 && strlen($jumlah[$i]['kode']) <=7) {
+                      
+                      echo DNS1D::getBarcodeSVG($jumlah[$i]['kode'], 'C39',1.2,40);
+                    } else if (strlen($jumlah[$i]['kode']) >=8 && strlen($jumlah[$i]['kode']) <=9) {
+                      echo DNS1D::getBarcodeSVG($jumlah[$i]['kode'], 'C39',1,40);
+                    } else if(strlen($jumlah[$i]['kode']) >=10){
+                      echo DNS1D::getBarcodeSVG($jumlah[$i]['kode'], 'C39',0.93,40);
+                    } 
                   ?>
                  </div>
                 <div style="text-align: center; font-size: 55%; padding-top: 4px">
@@ -75,7 +83,16 @@
                     echo substr($jumlah[$i]['nama'],0,45);
                   @endphp
                 </div>
-                <div style="text-align: center; font-size: 50%; padding-top: 3px">
+                @php
+                //atur size utk harga
+                if (strlen($jumlah[$i]['harga']) >= 6 || strlen($jumlah[$i]['harga3']) >= 6 || strlen($jumlah[$i]['harga6']) >= 6 ) {
+                  $divPrice = '<div style="text-align: center; font-size: 8px; padding-top: 3px">';
+                } else {
+                  $divPrice = '<div style="text-align: center; font-size: 50%; padding-top: 3px">';
+                }
+                
+                echo $divPrice;
+                @endphp
                     @currency($jumlah[$i]['harga']) x1 &ensp;
                     @currency($jumlah[$i]['harga3']) x3 &ensp;
                     @currency($jumlah[$i]['harga6']) x6

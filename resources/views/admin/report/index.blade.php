@@ -49,7 +49,7 @@
                       <td>{{ $key+1 }}</td>
                       <td>{{ $transaction->transaction_code }}</td>
                       <td>{{ $transaction->method }}</td>
-                      <td>{{ format_uang($transaction->purchase_order) }}</td>
+                      <td>@currency($transaction->purchase_order)</td>
                       <td>{{ date('d-m-Y H:i:s', strtotime($transaction->created_at)) }}</td>
                       <td>
                           <a href="{{ route('admin.report.show', $transaction->id) }}"><i class="fas fa-eye"></i></a>
@@ -64,7 +64,7 @@
                     @php
                     $total = array_sum($totalOrder);
                     @endphp
-                    <p>Total Keseluruhan: {{ format_uang($total)  }}</p>
+                    <p>Total : @currency($total)</p>
                   
               </tbody>
             </table>

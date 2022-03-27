@@ -25,7 +25,7 @@
                 <div class="row">
                     <div class="col-3">
                         <label for="get_product_code">Barcode Produk</label>
-                        <select class="js-example-basic-single" name="get_product_code" id="get_product_code" required style="width: 100% !important;">
+                        <select class="js-example-basic-single select2" name="get_product_code" id="get_product_code" required style="width: 100% !important;">
                             <option value="" selected></option>
                             @foreach($products as $product)
                                 <option value="{{ $product->product_code }}">{{ $product->product_code }}</option>

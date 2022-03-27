@@ -65,8 +65,8 @@
                       <td>{{ $key+1 }}</th>
                       <td>{{ $product->product->name }}</td>
                       <td>{{ $product->quantity }}</td>
-                      <td>{{ format_uang($product->price)  }}</td>
-                      <td>{{ format_uang($product->quantity * $product->price) }}</td>
+                      <td>@currency($product->price)</td>
+                      <td>@currency($product->quantity * $product->price)</td>
                   </tr>
                   @php
                       $total[] =  $product->quantity * $product->price;
@@ -77,7 +77,7 @@
                         $totalFinal = array_sum($total);
                     @endphp
                     <td colspan="4" align="right"><b>Total Akhir</b></td>
-                    <td>{{ format_uang($totalFinal)  }}</td>
+                    <td>@currency($totalFinal)</td>
                   </tr>
               </tbody>
             </table>

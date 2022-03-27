@@ -10,6 +10,9 @@
               <h4 class="card-title"> Detail Transaksi</h4><hr>
               <a href="{{ route('kasir.report.print', $transaction->id) }}" target="_blank" class="btn btn-primary">Cetak Nota</a>
             </div>
+            <div class="row justify-content-between d-flex d-inline">
+              <a href="{{ route('kasir.transaction.index') }}" class="btn btn-primary">Kembali Ke Transaksi</a>
+            </div>
           </div>
         <hr>
           <div class="row justify-content-between d-inline d-flex">
@@ -99,17 +102,17 @@
                         $price = $product->product->price6;
                       }
                   @endphp
-                  <td>{{ $price }}</td>
+                  <td>@currency($price)</td>
                   @php
                       $discountItem = $product->disc_rp + (($product->disc_prc/100) * ($price * $product->quantity));
                   @endphp
-                  <td>{{ $discountItem }}</td>
-                  <td>{{ format_uang(($price * $product->quantity)- $discountItem) }}</td>
+                  <td>@currency($discountItem)</td>
+                  <td>@currency(($price * $product->quantity)- $discountItem)</td>
               </tr>
                 @endforeach
                 <tr>
                   <td colspan="5" align="right"><b>Total</b></td>
-                  <td>{{ format_uang($transaction->totalSementara)  }}</td>
+                  <td>@currency($transaction->totalSementara)</td>
                 </tr>
                 <tr>
                   <td colspan="5" align="right"><b>Discount</b></td>
@@ -117,19 +120,19 @@
                       $discPercent = ($transaction->disc_total_prc / 100) * $transaction->totalSementara;
                       $discount = $discPercent + $transaction->disc_total_rp;
                   @endphp
-                  <td>{{ format_uang($discount)  }}</td>
+                  <td>@currency($discount)</td>
                 </tr>
                 <tr>
                   <td colspan="5" align="right"><b>Total Pembelian akhir</b></td>
-                  <td>{{ format_uang($transaction->purchase_order) }}</td>
+                  <td>@currency($transaction->purchase_order)</td>
                 </tr>
                 <tr>
                   <td colspan="5" align="right"><b>Bayar</b></td>
-                  <td>{{ format_uang($transaction->pay) }}</td>
+                  <td>@currency($transaction->pay)</td>
                 </tr>
                 <tr>
                   <td colspan="5" align="right"><b>Kembalian</b></td>
-                  <td>{{ format_uang($transaction->return) }}</td>
+                  <td>@currency($transaction->return)</td>
                 </tr>
             </tbody>
           </table>

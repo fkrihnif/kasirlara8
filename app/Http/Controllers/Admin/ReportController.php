@@ -38,7 +38,7 @@ class ReportController extends Controller
     {
         $transaction = Transaction::find($id);
         $productTransactions = ProductTransaction::where('transaction_id', $transaction->id)->get();
-        return view('admin.report.test', compact('transaction','productTransactions'));
+        return view('admin.report.test2', compact('transaction','productTransactions'));
     }
     public function delete(Request $request)
     {

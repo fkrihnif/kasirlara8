@@ -35,7 +35,7 @@ class HomeController extends Controller
         $products = Product::count();
         $supplies = Supply::count();
         $getProducts = Product::all();
-        $transactionGet = Transaction::whereDate('created_at', date('Y-m-d'))->get();
+        $transactionGet = Transaction::where('user_id', auth()->user()->id)->whereDate('created_at', date('Y-m-d'))->get();
       
         //data pembelian hari ini
         $supplierToday = Supply::whereDate('created_at', date('Y-m-d'))->get();

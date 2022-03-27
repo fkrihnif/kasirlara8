@@ -15,10 +15,10 @@ class CategorySeeder extends Seeder
     public function run()
     {
         Category::create([
-            'name' => 'Makanan'
+            'name' => 'Meja'
         ]);
         Category::create([
-            'name' => 'Minuman'
+            'name' => 'Kursi'
         ]);
     }
 }

@@ -23,7 +23,7 @@
                         @foreach($transactionGet as $transaction)
                         <tr>
                             <td>{{ $transaction->transaction_code }}  <a href="{{ route('kasir.report.show', $transaction->id) }}"><i class="fas fa-eye"></i></a></td>
-                            <td>{{ format_uang($transaction->purchase_order)  }}</td>
+                            <td>@currency($transaction->purchase_order)</td>
                         </tr>
                         @php
                             $purchaseOrder[] = $transaction->purchase_order;
@@ -33,7 +33,7 @@
                             @php
                                 $totalPurchase = array_sum($purchaseOrder);
                             @endphp
-                            <p>Total Keseluruhan: {{ format_uang($totalPurchase)  }}</p>
+                            <p>Total Keseluruhan: @currency($totalPurchase)</p>
                         </tr>
                     </tbody>
                 </table>
