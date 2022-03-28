@@ -48,7 +48,6 @@
 <table>
 
   @php
-  $barcode->product_code = '12232122';
   if (strlen($barcode->product_code) >=1 && strlen($barcode->product_code) <=7) {                    
     $lebar = 1.2;
   } else if (strlen($barcode->product_code) >=8 && strlen($barcode->product_code) <=9) {

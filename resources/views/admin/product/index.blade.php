@@ -76,7 +76,7 @@
                 <div class="modal-body">
                     <div class="form-group">
                         <label for="product_code">Kode Produk</label>
-                        <input type="text" class="form-control @error('product_code') is-invalid @enderror" id="product_code" name="product_code" disabled>
+                        <input type="text" class="form-control @error('product_code') is-invalid @enderror" id="product_code" name="product_code">
                         @error('product_code')
                         <div class="invalid-feedback">
                             {{$message}}
@@ -243,7 +243,7 @@
 
                     <div class="form-group">
                         <label for="product_code">Kode Produk (Otomatis)</label>
-                        <input type="text" class="form-control @error('product_code') is-invalid @enderror" id="product_code" name="product_code" value="{{ old('product_code') }}" disabled>
+                        <input type="text" class="form-control @error('product_code') is-invalid @enderror" id="product_code" name="product_code" value="{{ old('product_code') }}">
                         @error('product_code')
                         <div class="invalid-feedback">
                             {{$message}}

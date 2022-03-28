@@ -26,13 +26,14 @@ class ProductController extends Controller
         // toast('Data produk berhasil ditambah')->autoClose(2000)->hideCloseButton();
         // return redirect()->back();
 
-        // $validatedData = $request->validate([
-        //     'product_code' => 'required|unique:product'
-        // ]);
+        $validatedData = $request->validate([
+            'product_code' => 'required|unique:product'
+        ]);
 
         $product = new Product();
-        $max_barcode = $product->max('product_code');
-        $product->product_code = $max_barcode + 1;
+        // $max_barcode = $product->max('product_code');
+        // $product->product_code = $max_barcode + 1;
+        $product->product_code = $request->get('product_code');
         $product->name = $request->get('name');
         $product->quantity = $request->get('quantity');
         $product->price = $request->get('price');
@@ -55,11 +56,11 @@ class ProductController extends Controller
         // return redirect()->back();
 
         $product = Product::find($request->id);
-        // $validatedData = $request->validate([
-        //     'product_code' => 'required|unique:product,product_code,' . $request->id,
-        // ]);
+        $validatedData = $request->validate([
+            'product_code' => 'required|unique:product,product_code,' . $request->id,
+        ]);
 
-        // $product->product_code = $request->get('product_code');
+        $product->product_code = $request->get('product_code');
         $product->name = $request->get('name');
         $product->quantity = $request->get('quantity');
         $product->price = $request->get('price');

@@ -54,13 +54,13 @@
                         <i class="now-ui-icons loader_gear"></i>
                     </button>
                     <div class="dropdown-menu dropdown-menu-right">
-                        <a class="dropdown-item" href="{{ route('admin.transaction.index') }}">Lihat Detail</a>
+                        <a class="dropdown-item" href="{{ route('admin.report.index') }}">Lihat Detail</a>
                     </div>
                 </div>
             </div>
             <div class="card-footer">
                 <div class="stats">
-                    <a href="{{ route('admin.transaction.index') }}"><i class="now-ui-icons ui-1_zoom-bold"></i> Lihat Detail</a>
+                    <a href="{{ route('admin.report.index') }}"><i class="now-ui-icons ui-1_zoom-bold"></i> Lihat Detail</a>
                 </div>
             </div>
         </div>
