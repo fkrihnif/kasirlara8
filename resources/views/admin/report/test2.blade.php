@@ -9,8 +9,8 @@
           </script>
         <style>
             * {
-    font-size: 12px;
-    font-family: 'Times New Roman';
+    font-size: 13px;
+    font-family: 'calibri';
 }
 
 table {
@@ -20,21 +20,21 @@ table {
 
 td.description,
 th.description {
-    width: 20mm;
-    max-width: 20mm;
+    width: 15mm;
+    max-width: 15mm;
 }
 
 td.quantity,
 th.quantity {
-    width: 15mm;
-    max-width: 15mm;
+    width: 13mm;
+    max-width: 13mm;
     word-break: break-all;
 }
 
 td.price,
 th.price {
-    width: 15mm;
-    max-width: 15mm;
+    width: 16mm;
+    max-width: 16mm;
     word-break: break-all;
 }
 
@@ -44,8 +44,8 @@ th.price {
 }
 
 .ticket {
-    width: 56mm;
-    max-width: 56mm;
+    width: 45mm;
+    max-width: 45mm;
 }
 
 @media print {
@@ -58,13 +58,13 @@ th.price {
         <title>{{ App\Models\Company::take(1)->first()->name }}</title>
     </head>
     <body>
-        <div class="ticket" style="margin-left: 1mm;">
+        <div class="ticket">
             <p class="centered">{{ App\Models\Company::take(1)->first()->name }}
                 <br>{{ App\Models\Company::take(1)->first()->address }}
             </p>
-            <div>{{ $transaction->user->name }}</div>
+            <div style="font-size: 90%">{{ $transaction->user->name }}</div>
           
-            <div>Kode : {{$transaction->transaction_code}} -   @if ($transaction->customer_name != null or $transaction->account_number != null)
+            <div style="font-size: 90%">{{$transaction->transaction_code}} -   @if ($transaction->customer_name != null or $transaction->account_number != null)
                 Card
                               @else
                 Cash
@@ -130,10 +130,10 @@ th.price {
          
                 </tbody>
             </table>
-            <p class="centered" style="font-size: 50%">
-                <b>Terima Kasih Sudah Berbelanja</b><br>Barang yg sudah dibeli tdk dapat dikembalikan lagi.</p>
+            <p class="centered" style="font-size: 90%">
+                Terima Kasih<br><div style="font-size: 70%" class="centered">Barang yg sudah dibeli tdk dapat dikembalikan lagi.</div></p>
                 
-                <p class="centered">{{ date('d-M-Y H:i:s', strtotime($transaction->created_at)) }}</p>
+                <p class="centered" style="font-size: 90%">{{ date('d-M-Y H:i:s', strtotime($transaction->created_at)) }}</p>
         </div>
     </body>
 </html>
