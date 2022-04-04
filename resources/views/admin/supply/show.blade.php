@@ -7,25 +7,28 @@
         <div class="card-header">
           <h4 class="card-title"> Detail Pasok</h4><hr>
           <div class="card-title">
-            <a href="{{ route('admin.supply.print', $supply->id) }}" target="_blank"><i class="fas fa-print"></i></a>
+            <div class="justify-content-between d-flex d-inline">
+              <a href="{{ url()->previous() }}"><i class="fas fa-arrow-left"> Kembali</i></a>
+              <a href="{{ route('admin.supply.print', $supply->id) }}" target="_blank"><i class="fas fa-print"></i></a>
+            </div>
             <table>
               <tr>
-                <td>Kode Pasok</td>
+                <td>Kode Pembelian</td>
                 <td>:</td>
                 <td> &nbsp; {{ $supply->code }}</td>
               </tr>
                 <tr>
-                    <td>Nama Pemasok</td>
+                    <td>Nama Penjual</td>
                     <td>:</td>
                     <td> &nbsp; {{ $supply->supplier_name }}</td>
                 </tr>
                 <tr>
-                    <td>Total Produk</td>
+                    <td>Total Item</td>
                     <td>:</td>
                     <td> &nbsp; {{ $supply->productSupply()->count() }}</td>
                 </tr>
                 <tr>
-                    <td>Tanggal Pasok</td>
+                    <td>Tanggal Pembelian</td>
                     <td>:</td>
                     @php
                     $date = \Carbon\Carbon::parse($supply->supply_date)->format('d-m-Y');
@@ -44,7 +47,7 @@
                   No
                 </th>
                 <th>
-                  Nama Produk
+                  Kode - Nama Produk
                 </th>
                 <th>
                   Jumlah
@@ -63,7 +66,7 @@
                   @foreach($product_supplies as $key => $product)
                   <tr>
                       <td>{{ $key+1 }}</th>
-                      <td>{{ $product->product->name }}</td>
+                      <td>{{ $product->product->product_code }} - {{ $product->product->name }}</td>
                       <td>{{ $product->quantity }}</td>
                       <td>@currency($product->price)</td>
                       <td>@currency($product->quantity * $product->price)</td>

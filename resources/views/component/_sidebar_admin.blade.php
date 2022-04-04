@@ -46,7 +46,7 @@
           <li class="nav-item {{ request()->is('admin/supply') ?'active' : '' }}">
             <a href="{{ route('admin.supply.index') }}">
               <i class="now-ui-icons health_ambulance"></i>
-              <p>Kelola Pasok</p>
+              <p>Pembelian</p>
             </a>
           </li>
           <li class="nav-item {{ request()->is('admin/transaction') ?'active' : '' }}">
@@ -58,7 +58,7 @@
           <li class="nav-item {{ request()->is('admin/report') ?'active' : '' }}">
             <a href="{{ route('admin.report.index') }}">
               <i class="now-ui-icons education_paper"></i>
-              <p>Laporan</p>
+              <p>Laporan Penjualan</p>
             </a>
           </li>
           <li class="nav-item {{ request()->is('admin/setting') ?'active' : '' }}">

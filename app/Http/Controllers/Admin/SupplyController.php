@@ -47,23 +47,36 @@ class SupplyController extends Controller
             $this->generateUniqueCode();
         }
 
+        if ($request->supplier_name == null) {
+            $supplier_name = '-';
+        } else {
+            $supplier_name = $request->supplier_name;
+        }
+
+        if ($request->supply_date == null) {
+            $supply_date = date('Y-m-d');
+        } else {
+            $supply_date = $request->supply_date;
+        }
+
         try {
             $supply = Supply::create([
                 'user_id' => auth()->user()->id,
                 'code' => $code,
-                'supplier_name' => $request->supplier_name,
-                'supply_date' => $request->supply_date,
+                'supplier_name' => $supplier_name,
+                'supply_date' => $supply_date,
                 'total' => $code
                 
             ]);
             $total = [];
-            for($i = 0; $i < count($request->product_id); $i++){
-                $produk = Product::find($request->product_id[$i]);
+            for($i = 0; $i < count($request->product_code); $i++){
+                $productId = Product::where('product_code', $request->product_code[$i])->first()->id;
+                $produk = Product::find($productId);
                 $result = $produk->quantity + $request->quantity[$i];
                 $produk->update(['quantity' => $result]);
                 ProductSupply::create([
                     'supply_id' => $supply->id,
-                    'product_id' => $request->product_id[$i],
+                    'product_id' => $productId,
                     'quantity' => $request->quantity[$i],
                     'price' => $request->price[$i]
                 ]);
@@ -156,6 +169,6 @@ class SupplyController extends Controller
             }
         };
 
-        return view('admin.supply.print', compact('supply', 'product_supplies', 'jumlah', 'quantity'));
+        return view('admin.supply.print1', compact('supply', 'product_supplies', 'jumlah', 'quantity'));
     }
 }

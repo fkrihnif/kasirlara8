@@ -9,6 +9,7 @@ use App\Models\Supply;
 use App\Models\Transaction;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 
 class HomeController extends Controller
 {
@@ -35,7 +36,12 @@ class HomeController extends Controller
         $products = Product::count();
         $supplies = Supply::count();
         $getProducts = Product::all();
-        $transactionGet = Transaction::where('user_id', auth()->user()->id)->whereDate('created_at', date('Y-m-d'))->get();
+
+        if (auth()->user()->role == 'admin') {
+            $transactionGet = Transaction::whereDate('created_at', date('Y-m-d'))->orderBy('id', 'DESC')->get();
+        } else {
+            $transactionGet = Transaction::where('user_id', auth()->user()->id)->whereDate('created_at', date('Y-m-d'))->orderBy('id', 'DESC')->get();
+        }
       
         //data pembelian hari ini
         $supplierToday = Supply::whereDate('created_at', date('Y-m-d'))->get();
@@ -43,22 +49,21 @@ class HomeController extends Controller
         //barang terlaris (semua) tapi chart dan tdk dipakai
         $totalProduct = [];
         $nameProduct = [];
+        $codeProduct = [];
         $cek = Product::with('productTransactions')->get();
         foreach($cek as $c){
             $totalProduct [] = $c->productTransactions->sum('quantity');
             $nameProduct [] = $c->name;
+            $codeProduct [] = $c->product_code;
         }
         $result = [
             'total' => $totalProduct,
-            'product' => $nameProduct
-        ];
-        $result = [
-            'total' => $totalProduct,
-            'product' => $nameProduct
+            'product' => $nameProduct,
+            'code' => $codeProduct
         ];
         if(auth()->user()->role == 'admin'){
             
-            return view('admin.dashboard.index', compact('transactions','categories','products','supplies','transactionGet','result', 'supplierToday'));
+            return view('admin.dashboard.index', compact('transactions','categories','products','supplies','transactionGet', 'supplierToday'));
         } else {
             return view('kasir.dashboard.index', compact('transactions','categories','products','supplies','transactionGet','result', 'supplierToday'));
         }

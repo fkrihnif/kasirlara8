@@ -45,7 +45,7 @@
   }
 </style>
 
-<table>
+<table border="1px">
 
   @php
   if (strlen($barcode->product_code) >=1 && strlen($barcode->product_code) <=7) {                    
@@ -62,67 +62,15 @@
   <tr>
     <td style="margin-bottom: 0.2mm; margin-right: 1mm;">
           <div style="margin: auto; text-align:center;">
-            <?php 
-              echo DNS1D::getBarcodeSVG($barcode->product_code, 'C39',$lebar,40);
-            ?>
-           </div>
-          <div style="text-align: center; font-size: 55%; padding-top: 4px">
+            {{-- <div class="mb-3">{!! DNS1D::getBarcodeSVG('4445645656', 'UPCA') !!}</div>  --}}
+            {{-- <div>{!! DNS2D::getBarcodeHTML($barcode->product_code, 'C39') !!}</div> --}}
             @php
-              echo substr($barcode->name,0,45);
+               echo DNS1D::getBarcodeSVG($barcode->product_code, 'C39',1.2,33,'black', false);
             @endphp
-          </div>
-          @php
-              //atur size utk harga
-              if (strlen($barcode->price) >= 6 || strlen($barcode->price3) >= 6 || strlen($barcode->price6) >= 6 ) {
-                $divPrice = '<div style="text-align: center; font-size: 8px; padding-top: 3px">';
-              } else {
-                $divPrice = '<div style="text-align: center; font-size: 50%; padding-top: 3px">';
-              }
-              
-              echo $divPrice;
-          @endphp
-              @currency($barcode->price) x1 &ensp;
-              @currency($barcode->price3) x3 &ensp;
-              @currency($barcode->price6) x6
-          </div>
-    </td>
-    <td style="margin-bottom: 0.2mm; margin-right: 1mm;">
-          <div style="margin: auto; text-align:center;">
-            <?php 
-              echo DNS1D::getBarcodeSVG($barcode->product_code, 'C39',$lebar,40);
-            ?>
+         
            </div>
-          <div style="text-align: center; font-size: 55%; padding-top: 4px">
-            @php
-              echo substr($barcode->name,0,45);
-            @endphp
-          </div>
-          @php
-              echo $divPrice;
-          @endphp
-              @currency($barcode->price) x1 &ensp;
-              @currency($barcode->price3) x3 &ensp;
-              @currency($barcode->price6) x6
-          </div>
-    </td>
-    <td style="margin-bottom: 0.2mm">
-          <div style="margin: auto; text-align:center;">
-            <?php 
-              echo DNS1D::getBarcodeSVG($barcode->product_code, 'C39',$lebar,40);
-            ?>
-           </div>
-          <div style="text-align: center; font-size: 55%; padding-top: 4px">
-            @php
-              echo substr($barcode->name,0,45);
-            @endphp
-          </div>
-          @php
-            echo $divPrice;
-          @endphp
-              @currency($barcode->price) x1 &ensp;
-              @currency($barcode->price3) x3 &ensp;
-              @currency($barcode->price6) x6
-          </div>
+       
+   
     </td>
   </tr>
   @endfor

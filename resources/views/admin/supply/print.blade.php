@@ -80,7 +80,7 @@
                  </div>
                 <div style="text-align: center; font-size: 55%; padding-top: 4px">
                   @php
-                    echo substr($jumlah[$i]['nama'],0,45);
+                    echo substr($jumlah[$i]['nama'],0,32);
                   @endphp
                 </div>
                 @php
@@ -93,9 +93,14 @@
                 
                 echo $divPrice;
                 @endphp
-                    @currency($jumlah[$i]['harga']) x1 &ensp;
-                    @currency($jumlah[$i]['harga3']) x3 &ensp;
-                    @currency($jumlah[$i]['harga6']) x6
+              {{-- atur jika harga 1 3 6 sama --}}
+              @if ($jumlah[$i]['harga'] == $jumlah[$i]['harga3'] && $jumlah[$i]['harga3'] == $jumlah[$i]['harga6'])
+              @currency($jumlah[$i]['harga'])
+              @else
+              @currency($jumlah[$i]['harga']) x1 &ensp;
+              @currency($jumlah[$i]['harga3']) x3 &ensp;
+              @currency($jumlah[$i]['harga6']) x6
+              @endif
                 </div>
           </td>
         <?php
@@ -106,3 +111,4 @@
 <script type="text/javascript">
   window.onload = function() { window.print(); }
 </script>
+

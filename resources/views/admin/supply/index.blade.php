@@ -40,7 +40,7 @@
                     Kode
                 </th>
                 <th>
-                  Nama Pemasok
+                  Nama Penjual
                 </th>
                 <th>
                   Tanggal Pasok
@@ -49,7 +49,7 @@
                   Total Item
                 </th>
                 <th>
-                    Total harga
+                    Total Pembelian
                 </th>
                 <th>
                   Aksi
@@ -135,12 +135,13 @@
                     <div class="row input_fields_wrap">
                         <div class="col-3">
                             <div class="form-group">
-                                <label for="product_id">Nama Barang</label>
-                                <select name="product_id[]" id="product_id" class="custom-select" required>
-                                    @foreach($products as $product)
-                                        <option value="{{ $product->id }}">{{ $product->product_code }}</option>
-                                    @endforeach
-                                </select>
+                                <label for="product_code">Kode Produk</label>
+                                <input list="code" name="product_code[]" id="product_id">
+                                    <datalist id="code">
+                                        @foreach($products as $product)
+                                        <option value="{{ $product->product_code }}">{{ $product->name }}</option>
+                                        @endforeach
+                                    </datalist>
                                 @error('product_id')
                                 <div class="invalid-feedback">
                                     {{$message}}
@@ -176,7 +177,7 @@
                     </div>
                     <div class="form-group">
                         <label for="supplier_name">Nama Pemasok</label>
-                        <input type="text" class="form-control @error('supplier_name') is-invalid @enderror" id="supplier_name" name="supplier_name" value="{{ old('supplier_name') }}" required>
+                        <input type="text" class="form-control @error('supplier_name') is-invalid @enderror" id="supplier_name" name="supplier_name" value="{{ old('supplier_name') }}">
                         @error('supplier_name')
                         <div class="invalid-feedback">
                             {{$message}}
@@ -185,7 +186,7 @@
                     </div>
                     <div class="form-group">
                         <label for="supply_date">Tanggal Pasok</label>
-                        <input type="date" class="form-control @error('supply_date') is-invalid @enderror" id="supply_date" name="supply_date" value="{{ old('supply_date') }}" required>
+                        <input type="date" class="form-control @error('supply_date') is-invalid @enderror" id="supply_date" name="supply_date" value="{{ old('supply_date') }}">
                         @error('supply_date')
                         <div class="invalid-feedback">
                             {{$message}}
@@ -237,18 +238,19 @@
                         <div class="row input_fields_wrap">
                             <div class="col-3">
                                 <div class="form-group">
-                                    <label for="product_id">Nama Barang</label>
-                                    <select name="product_id[]" id="product_id" class="custom-select" required>
+                                <label for="product_code">Kode Produk</label>
+                                <input list="code" name="product_code[]" id="product_id">
+                                    <datalist id="code">
                                         @foreach($products as $product)
-                                            <option value="{{ $product->id }}">{{ $product->product_code }}</option>
+                                        <option value="{{ $product->product_code }}"></option>
                                         @endforeach
-                                    </select>
-                                    @error('product_id')
-                                    <div class="invalid-feedback">
-                                        {{$message}}
-                                    </div>
-                                    @enderror
+                                    </datalist>
+                                @error('product_id')
+                                <div class="invalid-feedback">
+                                    {{$message}}
                                 </div>
+                                @enderror
+                            </div>
                             </div>
                             <div class="col-3">
                                 <div class="form-group">

@@ -240,9 +240,11 @@
                     </button>
                 </div>
                 <div class="modal-body">
-
+                    <label>
+                        <input type="checkbox" name="otomatic" id="otomatic" value="yes" checked><a style="color: orange" data-toggle="tooltip" title="Centang jika ingin membuat kode produk otomatis"> Kode Produk otomatis</a> 
+                    </label>
                     <div class="form-group">
-                        <label for="product_code">Kode Produk (Otomatis)</label>
+                        <label for="product_code">Kode Produk</label>
                         <input type="text" class="form-control @error('product_code') is-invalid @enderror" id="product_code" name="product_code" value="{{ old('product_code') }}">
                         @error('product_code')
                         <div class="invalid-feedback">
@@ -329,6 +331,10 @@
 @endsection
 @push('scripts')
 <script>
+    $(document).ready(function(){
+    $('[data-toggle="tooltip"]').tooltip();
+    });
+
     $("#edit").on('show.bs.modal', (e) => {
         var id = $(e.relatedTarget).data('id');
         var code = $(e.relatedTarget).data('code');

@@ -22,7 +22,7 @@ class DashboardController extends Controller
         $products = Product::count();
         $supplies = Supply::count();
         $getProducts = Product::all();
-        $transactionGet = Transaction::whereDate('created_at', date('Y-m-d'))->get();
+        $transactionGet = Transaction::whereDate('created_at', date('Y-m-d'))->orderBy('id', 'DESC')->get();
       
         //data pembelian hari ini
         $supplierToday = Supply::whereDate('created_at', date('Y-m-d'))->get();
@@ -30,22 +30,22 @@ class DashboardController extends Controller
 
 
 
-        //barang terlaris (semua) tapi chart dan tdk dipakai
+        //barang terjual (semua) 
         $totalProduct = [];
         $nameProduct = [];
+        $codeProduct = [];
         $cek = Product::with('productTransactions')->get();
         foreach($cek as $c){
             $totalProduct [] = $c->productTransactions->sum('quantity');
             $nameProduct [] = $c->name;
+            $codeProduct [] = $c->product_code;
         }
         $result = [
             'total' => $totalProduct,
-            'product' => $nameProduct
+            'product' => $nameProduct,
+            'code' => $codeProduct
         ];
-        $result = [
-            'total' => $totalProduct,
-            'product' => $nameProduct
-        ];
-        return view('admin.dashboard.index', compact('transactions','categories','products','supplies','transactionGet','result', 'supplierToday'));
+        
+        return view('admin.dashboard.index', compact('transactions','categories','products','supplies','transactionGet', 'supplierToday'));
     }
 }

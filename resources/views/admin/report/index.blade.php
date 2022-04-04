@@ -50,7 +50,7 @@
                       <td>{{ $transaction->transaction_code }}</td>
                       <td>{{ $transaction->method }}</td>
                       <td>@currency($transaction->purchase_order)</td>
-                      <td>{{ date('d-m-Y H:i:s', strtotime($transaction->created_at)) }}</td>
+                      <td>{{ date('d M Y H:i:s', strtotime($transaction->created_at)) }}</td>
                       <td>
                           <a href="{{ route('admin.report.show', $transaction->id) }}"><i class="fas fa-eye"></i></a>
                           <a href="#" data-target="#delete" data-toggle="modal" data-id="{{ $transaction->id }}"><i class="fas fa-trash"></i></a>

@@ -93,11 +93,14 @@
             <div class="card-header ">
                 <i class="now-ui-icons loader_refresh spin"></i> &nbsp; Transaksi Penjualan Hari Ini : 
             </div>
-            <div class="card-body ">
-                <table class="table table-bordered">
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-bordered" id="dataTable">
                     <thead>
                         <tr>
+                            <td>No.</td>
                             <th>Kode Transaksi</th>
+                            <th>Waktu</th>
                             <th>Total Pembelian</th>
                         </tr>
                     </thead>
@@ -105,43 +108,35 @@
                         @php
                             $purchaseOrder = [];
                         @endphp
-                        @foreach($transactionGet as $transaction)
+                        @foreach($transactionGet as $key => $transaction)
                         <tr>
+                            <td>{{ $key+1 }}</td>
                             <td>{{ $transaction->transaction_code }}  <a href="{{ route('admin.report.show', $transaction->id) }}"><i class="fas fa-eye"></i></a></td>
+                            <td>{{ date('d M Y H:i:s', strtotime($transaction->created_at)) }}</td>
                             <td>@currency($transaction->purchase_order)</td>
                         </tr>
                         @php
                             $purchaseOrder[] = $transaction->purchase_order;
                         @endphp
                         @endforeach
-                        <tr>
-                            @php
-                                $totalPurchase = array_sum($purchaseOrder);
-                            @endphp
-                            <p>Total Keseluruhan: @currency($totalPurchase)</p>
-                        </tr>
                     </tbody>
                 </table>
+                </div>
+                @php
+                $totalPurchase = array_sum($purchaseOrder);
+                 @endphp
+            <b>Total Penjualan Hari ini: @currency($totalPurchase)</b>
             </div>
         </div>
     </div>
-    {{-- <div class="col-md-6 col-sm-12">
-        <div class="card">
-            <div class="card-header">
-                <i class="now-ui-icons loader_refresh spin"></i> &nbsp; 5 Produk Terlaris
-            </div>
-            <div class="card-body">        
-                <canvas id="myChart" width="400" height="400"></canvas>
-            </div>
-        </div>
-    </div> --}}
     <div class="col-md-6">
         <div class="card">
             <div class="card-header ">
                 <i class="now-ui-icons loader_refresh spin"></i> &nbsp; Transaksi Pembelian Hari Ini : 
             </div>
             <div class="card-body ">
-                <table class="table table-bordered">
+                <div class="table-responsive">
+                    <table class="table table-bordered" id="dataTable">
                     <thead>
                       <th>
                         Nama Pemasok
@@ -150,7 +145,7 @@
                         Tanggal Pasok
                       </th>
                       <th>
-                        Total Produk
+                        Total Item
                       </th>
                     </thead>
                     <tbody>
@@ -158,11 +153,12 @@
                         <tr>
                             <td>{{ $supply->supplier_name }}</td>
                             <td>{{ $supply->supply_date }}</td>
-                            <td>{{ $supply->productSupply()->count() }}    <a href="{{ route('admin.supply.show', $supply->id) }}"><i class="fas fa-eye"></i></a></td>
+                            <td>{{ $supply->productSupply()->count() }}  <a href="{{ route('admin.supply.show', $supply->id) }}"><i class="fas fa-eye"></i></a></td>
                         </tr>
                         @endforeach
                     </tbody>
                   </table>
+                </div>
             </div>
         </div>
     </div>
@@ -170,45 +166,4 @@
 @endsection
 
 @push('scripts')
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.0/chart.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/chart.js@3.7.0/dist/chart.min.js"></script>
-<script>
-    const ctx = document.getElementById('myChart').getContext('2d');
-    const myChart = new Chart(ctx, {
-        type: 'line',
-        data: {
-            labels: {!! json_encode($result['product']) !!},
-            datasets: [{
-                label: '# Total Penjualan',
-                data: {!! json_encode($result['total']) !!},
-
-                backgroundColor: [
-                    'rgba(255, 99, 132, 0.2)',
-                    'rgba(54, 162, 235, 0.2)',
-                    'rgba(255, 206, 86, 0.2)',
-                    'rgba(75, 192, 192, 0.2)',
-                    'rgba(153, 102, 255, 0.2)',
-                    'rgba(255, 159, 64, 0.2)'
-                ],
-                borderColor: [
-                    'rgba(255, 99, 132, 1)',
-                    'rgba(54, 162, 235, 1)',
-                    'rgba(255, 206, 86, 1)',
-                    'rgba(75, 192, 192, 1)',
-                    'rgba(153, 102, 255, 1)',
-                    'rgba(255, 159, 64, 1)'
-                ],
-                borderWidth: 1
-            }]
-        },
-        options: {
-            scales: {
-                y: {
-                    beginAtZero: true
-                }
-            }
-        }
-    });
-    </script>
-     
 @endpush
