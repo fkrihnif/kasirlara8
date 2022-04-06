@@ -25,7 +25,7 @@ class DashboardController extends Controller
         $transactionGet = Transaction::whereDate('created_at', date('Y-m-d'))->orderBy('id', 'DESC')->get();
       
         //data pembelian hari ini
-        $supplierToday = Supply::whereDate('created_at', date('Y-m-d'))->get();
+        $supplierToday = Supply::whereDate('created_at', date('Y-m-d'))->orderBy('id', 'DESC')->get();
 
 
 

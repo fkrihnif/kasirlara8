@@ -14,22 +14,34 @@ class ProductController extends Controller
         $products = Product::orderBy('id', 'DESC')->get();
         $categories = Category::all();
         return view('admin.product.index', compact('products', 'categories'));
-        //testing bismillah
     }
+
+    public function generateUniqueCode()
+    {
+        $randomNumber = random_int(10000, 99999);
+        $characters = 'ABCDEFGHJKLMNPRSTUVWXYZ';
+        $charactersNumber = strlen($characters);
+        
+        $char = '';
+        while (strlen($char) < 1) {
+            $position = rand(0, $charactersNumber - 1);
+            $character = $characters[$position];
+            $char = $char.$character;
+        }
+
+        $code = $char.$randomNumber;
+
+        if (Product::where('product_code', $code)->exists()) {
+        $this->generateUniqueCode();
+        }
+        return $code;
+    }
+
     public function store(Request $request)
     {
-        // $product = Product::count();
-        // $validatedData = $request->validate([
-        //     'product_code' => 'required|unique:product'
-        // ]);
-        // Product::create($request->all());
-        // toast('Data produk berhasil ditambah')->autoClose(2000)->hideCloseButton();
-        // return redirect()->back();
-
         if ($request->get('otomatic') == 'yes') {
             $product = new Product();
-            $max_barcode = $product->max('product_code');
-            $product->product_code = $max_barcode + 1;
+            $product->product_code = $this->generateUniqueCode();
         } else {
             $validatedData = $request->validate([
                 'product_code' => 'required|unique:product'
@@ -50,14 +62,6 @@ class ProductController extends Controller
     }
     public function update(Request $request)
     {
-        // $validatedData = $request->validate([
-        //     'product_code' => 'required|unique:product,product_code,' . $request->id,
-        // ]);
-        // $product = Product::find($request->id);
-        // $product->update($request->all());
-        // toast('Data produk berhasil diubah')->autoClose(2000)->hideCloseButton();
-        // return redirect()->back();
-
         $product = Product::find($request->id);
         $validatedData = $request->validate([
             'product_code' => 'required|unique:product,product_code,' . $request->id,

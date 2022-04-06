@@ -11,7 +11,7 @@
               <a href="{{ route('kasir.report.print', $transaction->id) }}" target="_blank" class="btn btn-primary">Cetak Nota</a>
             </div>
             <div class="row justify-content-between d-flex d-inline">
-              <a href="{{ route('kasir.transaction.index') }}" class="btn btn-primary">Kembali Ke Transaksi</a>
+              <a href="{{ url()->previous() }}"><i class="fas fa-arrow-left"> Kembali</i></a>
             </div>
           </div>
         <hr>
@@ -26,7 +26,7 @@
                   <tr>
                     <td>Tanggal</td>
                     <td> : </td>
-                    <td> {{ date('d-m-Y H:i:s', strtotime($transaction->created_at)) }}</td>
+                    <td> {{ date('d M Y H:i:s', strtotime($transaction->created_at)) }}</td>
                   </tr>
                   <tr>
                     <td>Kasir</td>

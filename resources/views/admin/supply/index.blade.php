@@ -5,8 +5,13 @@
     <div class="col-md-12">
       <div class="card">
         <div class="card-header justify-content-between d-flex d-inline">
-          <h4 class="card-title"> Data Pasok</h4>
+          <h4 class="card-title"> Data Pembelian</h4>
           <a href="#" data-toggle="modal" data-target="#tambah"><i class="btn btn-sm btn-primary shadow-sm">+ Tambah</i></a>
+        </div>
+        <div class="ml-3">
+            <button onclick="window.location.reload();" class="btn btn-sm btn-primary">
+                <i class="now-ui-icons loader_refresh"></i> Refresh
+            </button>
         </div>
         <div class="card-body">
             <form action="{{ route('admin.supply.index') }}">
@@ -43,7 +48,7 @@
                   Nama Penjual
                 </th>
                 <th>
-                  Tanggal Pasok
+                  Tanggal
                 </th>
                 <th>
                   Total Item
@@ -100,13 +105,13 @@
                 @method('delete')
                 <input type="hidden" name="id">
                 <div class="modal-header">
-                    <h5 class="modal-title"><span>Hapus</span> Data Pasok</h5>
+                    <h5 class="modal-title"><span>Hapus</span> Data Pembelian</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
                 <div class="modal-body">
-                    Apakah Anda yakin ingin menghapus Data Pasok ini ?
+                    Apakah Anda yakin ingin menghapus Data Pembelian ini ?
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
@@ -126,7 +131,7 @@
                 @csrf
                 <input type="hidden" name="id">
                 <div class="modal-header">
-                    <h5 class="modal-title"><span>Tambah</span> Data Pasok</h5>
+                    <h5 class="modal-title"><span>Tambah</span> Data Pembelian</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -176,7 +181,7 @@
                         </div>
                     </div>
                     <div class="form-group">
-                        <label for="supplier_name">Nama Pemasok</label>
+                        <label for="supplier_name">Nama Penjual</label>
                         <input type="text" class="form-control @error('supplier_name') is-invalid @enderror" id="supplier_name" name="supplier_name" value="{{ old('supplier_name') }}">
                         @error('supplier_name')
                         <div class="invalid-feedback">
@@ -185,7 +190,7 @@
                         @enderror
                     </div>
                     <div class="form-group">
-                        <label for="supply_date">Tanggal Pasok</label>
+                        <label for="supply_date">Tanggal</label>
                         <input type="date" class="form-control @error('supply_date') is-invalid @enderror" id="supply_date" name="supply_date" value="{{ old('supply_date') }}">
                         @error('supply_date')
                         <div class="invalid-feedback">

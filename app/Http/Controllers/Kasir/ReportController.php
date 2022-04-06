@@ -11,7 +11,7 @@ class ReportController extends Controller
 {
     public function index()
     {
-        $transactions = Transaction::where('user_id', auth()->user()->id)->get();
+        $transactions = Transaction::where('user_id', auth()->user()->id)->orderBy('id', 'DESC')->get();
         return view('kasir.report.index', compact('transactions'));
     }
     public function show($id)

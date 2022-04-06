@@ -45,32 +45,117 @@
   }
 </style>
 
-<table border="1px">
-
-  @php
-  if (strlen($barcode->product_code) >=1 && strlen($barcode->product_code) <=7) {                    
-    $lebar = 1.2;
-  } else if (strlen($barcode->product_code) >=8 && strlen($barcode->product_code) <=9) {
-    $lebar = 1.1;
-  } else if(strlen($barcode->product_code) >=10){
-    $lebar = 0.93;
-  } 
-                  
-  @endphp
+<table>
 
   @for ($i = 0; $i < $banyak; $i++)
   <tr>
-    <td style="margin-bottom: 0.2mm; margin-right: 1mm;">
-          <div style="margin: auto; text-align:center;">
-            {{-- <div class="mb-3">{!! DNS1D::getBarcodeSVG('4445645656', 'UPCA') !!}</div>  --}}
-            {{-- <div>{!! DNS2D::getBarcodeHTML($barcode->product_code, 'C39') !!}</div> --}}
+    <td style="margin-bottom: 0.3mm; margin-right: 1mm;">
+        <div style="margin: auto; text-align:center;">
+                  <?php 
+                  if (strlen($barcode->product_code) >=1 && strlen($barcode->product_code) <=6) {    
+                    echo DNS1D::getBarcodeSVG($barcode->product_code, 'C39',1.3,23,'black', false);
+                  } else if (strlen($barcode->product_code) == 7 ) {    
+                    echo DNS1D::getBarcodeSVG($barcode->product_code, 'C39',1.2,23,'black', false);
+                  }else if (strlen($barcode->product_code) == 8 ) {    
+                    echo DNS1D::getBarcodeSVG($barcode->product_code, 'C39',1.1,23,'black', false);
+                  } else if (strlen($barcode->product_code) == 9 ) {    
+                    echo DNS1D::getBarcodeSVG($barcode->product_code, 'C39',1.02,23,'black', false);
+                  }else if(strlen($barcode->product_code) >=10){
+                    echo DNS1D::getBarcodeSVG($barcode->product_code, 'C39',0.9,23,'black', false);
+                  } 
+                ?>
+           <div style="font-size: 60%; text-align: left; width: 99px; white-space: initial; float:left; margin:3px 0 3px 3px; padding-left: 5px">
             @php
-               echo DNS1D::getBarcodeSVG($barcode->product_code, 'C39',1.2,33,'black', false);
+              echo substr($barcode->product_code,0,45);
+            @endphp 
+            <br>
+            @php
+              echo substr($barcode->name,0,32);
             @endphp
-         
-           </div>
-       
-   
+            </div>
+            <div style="text-align: right; font-size: 60%; width: 100%; max-width: 71px; float:right; margin:3px; padding-right: 4px">
+        {{-- atur jika harga 1 3 6 sama --}}
+      @if ($barcode->price == $barcode->price3 && $barcode->price3 == $barcode->price6)
+      @currency($barcode->price)
+      @else
+      @currency($barcode->price) x 1<br>
+      @currency($barcode->price3) x 3<br>
+      @currency($barcode->price6) x 6
+      @endif
+            </div>
+          </div>
+    </td>
+    <td style="margin-bottom: 0.3mm; margin-right: 1mm;">
+      <div style="margin: auto; text-align:center;">
+        <?php 
+        if (strlen($barcode->product_code) >=1 && strlen($barcode->product_code) <=6) {    
+          echo DNS1D::getBarcodeSVG($barcode->product_code, 'C39',1.3,23,'black', false);
+        } else if (strlen($barcode->product_code) == 7 ) {    
+          echo DNS1D::getBarcodeSVG($barcode->product_code, 'C39',1.2,23,'black', false);
+        }else if (strlen($barcode->product_code) == 8 ) {    
+          echo DNS1D::getBarcodeSVG($barcode->product_code, 'C39',1.1,23,'black', false);
+        } else if (strlen($barcode->product_code) == 9 ) {    
+          echo DNS1D::getBarcodeSVG($barcode->product_code, 'C39',1.02,23,'black', false);
+        }else if(strlen($barcode->product_code) >=10){
+          echo DNS1D::getBarcodeSVG($barcode->product_code, 'C39',0.9,23,'black', false);
+        } 
+      ?>
+ <div style="font-size: 60%; text-align: left; width: 99px; white-space: initial; float:left; margin:3px 0 3px 3px; padding-left: 5px">
+  @php
+    echo substr($barcode->product_code,0,45);
+  @endphp 
+  <br>
+  @php
+    echo substr($barcode->name,0,32);
+  @endphp
+  </div>
+  <div style="text-align: right; font-size: 60%; width: 100%; max-width: 71px; float:right; margin:3px; padding-right: 4px">
+{{-- atur jika harga 1 3 6 sama --}}
+@if ($barcode->price == $barcode->price3 && $barcode->price3 == $barcode->price6)
+@currency($barcode->price)
+@else
+@currency($barcode->price) x 1<br>
+@currency($barcode->price3) x 3<br>
+@currency($barcode->price6) x 6
+@endif
+  </div>
+</div>
+    </td>
+    <td style="margin-bottom: 0.3mm">
+      <div style="margin: auto; text-align:center;">
+        <?php 
+        if (strlen($barcode->product_code) >=1 && strlen($barcode->product_code) <=6) {    
+          echo DNS1D::getBarcodeSVG($barcode->product_code, 'C39',1.3,23,'black', false);
+        } else if (strlen($barcode->product_code) == 7 ) {    
+          echo DNS1D::getBarcodeSVG($barcode->product_code, 'C39',1.2,23,'black', false);
+        }else if (strlen($barcode->product_code) == 8 ) {    
+          echo DNS1D::getBarcodeSVG($barcode->product_code, 'C39',1.1,23,'black', false);
+        } else if (strlen($barcode->product_code) == 9 ) {    
+          echo DNS1D::getBarcodeSVG($barcode->product_code, 'C39',1.02,23,'black', false);
+        }else if(strlen($barcode->product_code) >=10){
+          echo DNS1D::getBarcodeSVG($barcode->product_code, 'C39',0.9,23,'black', false);
+        } 
+      ?>
+ <div style="font-size: 60%; text-align: left; width: 99px; white-space: initial; float:left; margin:3px 0 3px 3px; padding-left: 5px">
+  @php
+    echo substr($barcode->product_code,0,45);
+  @endphp 
+  <br>
+  @php
+    echo substr($barcode->name,0,32);
+  @endphp
+  </div>
+  <div style="text-align: right; font-size: 60%; width: 100%; max-width: 71px; float:right; margin:3px; padding-right: 4px">
+{{-- atur jika harga 1 3 6 sama --}}
+@if ($barcode->price == $barcode->price3 && $barcode->price3 == $barcode->price6)
+@currency($barcode->price)
+@else
+@currency($barcode->price) x 1<br>
+@currency($barcode->price3) x 3<br>
+@currency($barcode->price6) x 6
+@endif
+  </div>
+</div>
     </td>
   </tr>
   @endfor

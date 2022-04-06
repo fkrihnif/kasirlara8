@@ -68,10 +68,14 @@
                   <div style="margin-top: 1px;text-align:center;">
                 {{-- <div style="margin: auto; text-align:center;"> --}}
                           <?php 
-                          if (strlen($jumlah[$i]['kode']) >=1 && strlen($jumlah[$i]['kode']) <=7) {    
+                          if (strlen($jumlah[$i]['kode']) >=1 && strlen($jumlah[$i]['kode']) <=6) {    
+                            echo DNS1D::getBarcodeSVG($jumlah[$i]['kode'], 'C39',1.3,23,'black', false);
+                          } else if (strlen($jumlah[$i]['kode']) == 7 ) {    
                             echo DNS1D::getBarcodeSVG($jumlah[$i]['kode'], 'C39',1.2,23,'black', false);
-                          }else if (strlen($jumlah[$i]['kode']) >=8 && strlen($jumlah[$i]['kode']) <=9) {    
-                            echo DNS1D::getBarcodeSVG($jumlah[$i]['kode'], 'C39',1,23,'black', false);
+                          }else if (strlen($jumlah[$i]['kode']) == 8 ) {    
+                            echo DNS1D::getBarcodeSVG($jumlah[$i]['kode'], 'C39',1.1,23,'black', false);
+                          } else if (strlen($jumlah[$i]['kode']) == 9 ) {    
+                            echo DNS1D::getBarcodeSVG($jumlah[$i]['kode'], 'C39',1.02,23,'black', false);
                           }else if(strlen($jumlah[$i]['kode']) >=10){
                             echo DNS1D::getBarcodeSVG($jumlah[$i]['kode'], 'C39',0.9,23,'black', false);
                           } 
@@ -104,5 +108,6 @@
           </tr>
   </table>
   <script type="text/javascript">
+    window.onload = function() { window.print(); }
   </script>
   

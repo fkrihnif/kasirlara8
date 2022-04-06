@@ -26,26 +26,33 @@ class SupplyController extends Controller
         } else {
             $supplies = Supply::orderBy('id', 'DESC')->get();
         }
-        // dd($t = Supply::all());
-        $products = Product::all();
+        $products = Product::orderBy('id', 'DESC')->get();
         return view('admin.supply.index', compact('supplies','products'));
     }
-    public function store(Request $request)
-    {
-        DB::beginTransaction();
 
+    public function generateUniqueCode()
+    {
         $characters = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
         $charactersNumber = strlen($characters);
         $codeLength = 6;
+
         $code = '';
+
         while (strlen($code) < 6) {
-            $position = rand(0, $charactersNumber - 1);
-            $character = $characters[$position];
-            $code = $code.$character;
+        $position = rand(0, $charactersNumber - 1);
+        $character = $characters[$position];
+        $code = $code.$character;
         }
+
         if (Supply::where('code', $code)->exists()) {
-            $this->generateUniqueCode();
+        $this->generateUniqueCode();
         }
+        return $code;
+    }
+
+    public function store(Request $request)
+    {
+        DB::beginTransaction();
 
         if ($request->supplier_name == null) {
             $supplier_name = '-';
@@ -62,10 +69,10 @@ class SupplyController extends Controller
         try {
             $supply = Supply::create([
                 'user_id' => auth()->user()->id,
-                'code' => $code,
+                'code' => $this->generateUniqueCode(),
                 'supplier_name' => $supplier_name,
                 'supply_date' => $supply_date,
-                'total' => $code
+                'total' => ''
                 
             ]);
             $total = [];
@@ -88,11 +95,11 @@ class SupplyController extends Controller
             $s->total = $totalFinal;
             $s->save();
             DB::commit();
-            toast('Data Pasok berhasil ditambahkan')->autoClose(2000)->hideCloseButton();
+            toast('Data Pembelian berhasil ditambahkan')->autoClose(2000)->hideCloseButton();
             return redirect()->back();
         } catch (\Exception $e) {
             DB::rollback();
-            toast('Gagal menambah data pasok')->autoClose(2000)->hideCloseButton();
+            toast('Gagal menambah data pembelian')->autoClose(2000)->hideCloseButton();
             return redirect()->back();
         }
        
@@ -102,7 +109,7 @@ class SupplyController extends Controller
         $supply = Supply::find($request->id);
         $supply->delete();
         toast('Data pasok berhasil dihapus')->autoClose(2000)->hideCloseButton();
-        return redirect()->back()->with('success','Berhasil menghapus data pasok');
+        return redirect()->back()->with('success','Berhasil menghapus data pembelian');
     }
     public function update(Request $request)
     {

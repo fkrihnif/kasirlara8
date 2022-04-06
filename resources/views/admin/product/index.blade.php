@@ -8,6 +8,11 @@
           <h4 class="card-title"> Data Produk</h4>
           <a href="#" data-toggle="modal" data-target="#tambah"><i class="btn btn-sm btn-primary shadow-sm">+ Tambah</i></a>
         </div>
+        <div class="ml-3">
+            <button onclick="window.location.reload();" class="btn btn-sm btn-primary">
+                <i class="now-ui-icons loader_refresh"></i> Refresh
+            </button>
+        </div>
         <div class="card-body">
           <div class="table-responsive">
             <table class="table table-bordered" id="dataTable">
@@ -241,7 +246,7 @@
                 </div>
                 <div class="modal-body">
                     <label>
-                        <input type="checkbox" name="otomatic" id="otomatic" value="yes" checked><a style="color: orange" data-toggle="tooltip" title="Centang jika ingin membuat kode produk otomatis"> Kode Produk otomatis</a> 
+                        <input type="checkbox" name="otomatic" id="otomatic" value="yes" checked><a style="color: orange" data-toggle="tooltip" title="Centang jika ingin membuat kode produk otomatis, dan kode produk tidak perlu diisi"> Kode Produk otomatis</a> 
                     </label>
                     <div class="form-group">
                         <label for="product_code">Kode Produk</label>
@@ -277,7 +282,7 @@
                     </div>
                     <div class="form-group">
                         <label for="quantity">Jumlah</label>
-                        <input type="number" class="form-control @error('quantity') is-invalid @enderror" id="quantity" name="quantity" value="{{ old('quantity') }}" required>
+                        <input type="number" class="form-control @error('quantity') is-invalid @enderror" id="quantity" name="quantity" value="0" required>
                         @error('quantity')
                         <div class="invalid-feedback">
                             {{$message}}

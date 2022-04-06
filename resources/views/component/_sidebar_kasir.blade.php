@@ -28,7 +28,7 @@
           <li class="nav-item {{ request()->is('kasir/report') ?'active' : '' }}">
             <a href="{{ route('kasir.report.index') }}">
               <i class="now-ui-icons education_paper"></i>
-              <p>Laporan</p>
+              <p>Laporan Penjualan</p>
             </a>
           </li>
           <li class="nav-item {{ request()->is('kasir/profile') ?'active' : '' }}">

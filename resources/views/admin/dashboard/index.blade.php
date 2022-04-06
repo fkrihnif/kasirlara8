@@ -68,7 +68,7 @@
     <div class="col-lg-3">
         <div class="card card-chart">
             <div class="card-header">
-                <h5 class="card-category">Total Pasok</h5>
+                <h5 class="card-category">Total Pembelian</h5>
                 <h4 class="card-title">{{ $supplies }}</h4>
                 <div class="dropdown">
                     <button type="button" class="btn btn-round btn-outline-default dropdown-toggle btn-simple btn-icon no-caret" data-toggle="dropdown">
@@ -139,26 +139,36 @@
                     <table class="table table-bordered" id="dataTable">
                     <thead>
                       <th>
-                        Nama Pemasok
-                      </th>
-                      <th>
-                        Tanggal Pasok
+                        Nama Penjual
                       </th>
                       <th>
                         Total Item
                       </th>
+                      <th>
+                        Total Pembelian
+                      </th>
                     </thead>
                     <tbody>
+                        @php
+                        $totalBuy = [];
+                        @endphp
                         @foreach($supplierToday as $key => $supply)
                         <tr>
                             <td>{{ $supply->supplier_name }}</td>
-                            <td>{{ $supply->supply_date }}</td>
-                            <td>{{ $supply->productSupply()->count() }}  <a href="{{ route('admin.supply.show', $supply->id) }}"><i class="fas fa-eye"></i></a></td>
+                            <td>{{ $supply->productSupply()->count() }}</td>
+                            <td>@currency($supply->total)  <a href="{{ route('admin.supply.show', $supply->id) }}"><i class="fas fa-eye"></i></a></td>
                         </tr>
+                        @php
+                        $totalBuy[] = $supply->total;
+                        @endphp
                         @endforeach
                     </tbody>
                   </table>
                 </div>
+                @php
+                $total = array_sum($totalBuy);
+                @endphp
+                <b>Total Pembelian Hari Ini: @currency($total)</b>
             </div>
         </div>
     </div>

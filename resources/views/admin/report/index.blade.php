@@ -7,6 +7,11 @@
         <div class="card-header justify-content-between d-flex d-inline">
           <h4 class="card-title"> Laporan Transaksi</h4>
         </div>
+        <div class="ml-3">
+            <button onclick="window.location.reload();" class="btn btn-sm btn-primary">
+                <i class="now-ui-icons loader_refresh"></i> Refresh
+            </button>
+        </div>
         <div class="card-body">
             <form action="{{ route('admin.report.index') }}">
             

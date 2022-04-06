@@ -151,6 +151,27 @@ class TransactionController extends Controller
             'data' => $totalBuy
         ]);
     }
+
+    public function generateUniqueCode()
+    {
+        $characters = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        $charactersNumber = strlen($characters);
+        $codeLength = 6;
+
+        $code = '';
+
+        while (strlen($code) < 6) {
+        $position = rand(0, $charactersNumber - 1);
+        $character = $characters[$position];
+        $code = $code.$character;
+        }
+
+        if (Transaction::where('transaction_code', $code)->exists()) {
+            $this->generateUniqueCode();
+        }
+        return $code;
+    }
+
     public function pay(Request $request)
     {
         DB::beginTransaction();
@@ -175,25 +196,8 @@ class TransactionController extends Controller
                 $totalPurchaseFinal = $totalPurchase - $request->get_total_disc_rp - $totalDiscPercent ;
 
                 $transaction = new Transaction;
-                //utk membuat kode unik penjualan
-                $characters = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-                $charactersNumber = strlen($characters);
-                $codeLength = 6;
-            
-                $code = '';
-            
-                while (strlen($code) < 6) {
-                    $position = rand(0, $charactersNumber - 1);
-                    $character = $characters[$position];
-                    $code = $code.$character;
-                }
-            
-                if (Transaction::where('transaction_code', $code)->exists()) {
-                    $this->generateUniqueCode();
-                }
-                
                 $transaction->user_id = auth()->user()->id;
-                $transaction->transaction_code = $code;
+                $transaction->transaction_code = $this->generateUniqueCode();
                 $transaction->pay = $request->payment;
                 $transaction->return = $request->return;
                 $transaction->totalSementara = $totalPurchase;
@@ -215,7 +219,7 @@ class TransactionController extends Controller
             return redirect()->route('admin.report.show', $transaction->id);
         } catch (\Exception $e) {
             $var = response()->json([
-                'message' => 'failed oii',
+                'message' => 'Gagal',
                 'data' => $e
             ], 500);
         }
