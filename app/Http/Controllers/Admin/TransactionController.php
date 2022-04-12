@@ -154,13 +154,13 @@ class TransactionController extends Controller
 
     public function generateUniqueCode()
     {
-        $characters = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        $characters = '0123456789ABCDEFGHJKLMNPQRSTUVWXYZ';
         $charactersNumber = strlen($characters);
-        $codeLength = 6;
+        $codeLength = 10;
 
         $code = '';
 
-        while (strlen($code) < 6) {
+        while (strlen($code) < $codeLength) {
         $position = rand(0, $charactersNumber - 1);
         $character = $characters[$position];
         $code = $code.$character;
@@ -216,7 +216,11 @@ class TransactionController extends Controller
                 DB::commit();
             }
             toast('Pembayaran berhasil')->autoClose(2000)->hideCloseButton();
-            return redirect()->route('admin.report.show', $transaction->id);
+            // return redirect()->route('admin.report.show', $transaction->id);
+            $transactionId = $transaction->id;
+            $transactionn = Transaction::find($transactionId);
+            $productTransactions = ProductTransaction::where('transaction_id', $transactionId)->get();
+            return view('admin.report.test2', compact('transactionn','productTransactions'));
         } catch (\Exception $e) {
             $var = response()->json([
                 'message' => 'Gagal',

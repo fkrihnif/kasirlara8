@@ -6,6 +6,13 @@
         <meta http-equiv="X-UA-Compatible" content="ie=edge">
         <script type="text/javascript">
             window.onload = function() { window.print(); }
+
+            document.onkeyup = function(e) {
+                if (e.which == 8) {
+                   var $link = document.referrer;
+                    location.replace($link);
+                } 
+                };
           </script>
         <style>
             * {
@@ -62,9 +69,9 @@ th.price {
             <p class="centered">{{ App\Models\Company::take(1)->first()->name }}
                 <br>{{ App\Models\Company::take(1)->first()->address }}
             </p>
-            <div style="font-size: 90%">{{ $transaction->user->name }}</div>
+            <div style="font-size: 90%">{{ $transactionn->user->name }}</div>
           
-            <div style="font-size: 90%">{{$transaction->transaction_code}} -   @if ($transaction->customer_name != null or $transaction->account_number != null)
+            <div style="font-size: 90%">{{$transactionn->transaction_code}} -   @if ($transactionn->customer_name != null or $transactionn->account_number != null)
                 Card
                               @else
                 Cash
@@ -99,10 +106,10 @@ th.price {
                     </tr>
                         
                     @endforeach
-                    @if ($transaction->disc_total_prc != null || $transaction->disc_total_rp != null)
+                    @if ($transactionn->disc_total_prc != null || $transactionn->disc_total_rp != null)
                     @php
-                    $discPercent = ($transaction->disc_total_prc / 100) * $transaction->totalSementara;
-                    $discount = $discPercent + $transaction->disc_total_rp;
+                    $discPercent = ($transactionn->disc_total_prc / 100) * $transactionn->totalSementara;
+                    $discount = $discPercent + $transactionn->disc_total_rp;
                     @endphp
                     <tr style="  border-top: 1px solid black;
                       border-collapse: collapse;">
@@ -115,17 +122,17 @@ th.price {
                     border-collapse: collapse;">
                         <td class="quantity"></td>
                         <td class="description">Total</td>
-                        <td class="price" style="font-size: 90%">{{ format_uang($transaction->purchase_order)  }}</td>
+                        <td class="price" style="font-size: 90%">{{ format_uang($transactionn->purchase_order)  }}</td>
                     </tr>
                     <tr>
                         <td class="quantity"></td>
                         <td class="description">Cash</td>
-                        <td class="price" style="font-size: 90%">{{ format_uang($transaction->pay)  }}</td>
+                        <td class="price" style="font-size: 90%">{{ format_uang($transactionn->pay)  }}</td>
                     </tr>
                     <tr>
                         <td class="quantity"></td>
                         <td class="description">Kembali</td>
-                        <td class="price" style="font-size: 90%">{{ format_uang($transaction->return)  }}</td>
+                        <td class="price" style="font-size: 90%">{{ format_uang($transactionn->return)  }}</td>
                     </tr>
          
                 </tbody>
@@ -133,7 +140,7 @@ th.price {
             <p class="centered" style="font-size: 90%">
                 Terima Kasih<br><div style="font-size: 70%" class="centered">Barang yg sudah dibeli tdk dapat dikembalikan lagi.</div></p>
                 
-                <p class="centered" style="font-size: 90%">{{ date('d-M-Y H:i:s', strtotime($transaction->created_at)) }}</p>
+                <p class="centered" style="font-size: 90%">{{ date('d-M-Y H:i:s', strtotime($transactionn->created_at)) }}</p>
         </div>
     </body>
 </html>

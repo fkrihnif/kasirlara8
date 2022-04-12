@@ -63,7 +63,7 @@
                     </div>
                     <div class="col-3">
                         <div class="col-4" style="margin-top: 10px;">
-                            <input type="button" value="Tambahkan" id="addToCart" disabled class="btn btn-primary text-white">
+                            <input type="button" value="Tambahkan (F8)" id="addToCart" disabled class="btn btn-primary text-white">
                         </div>
                     </div>
                 </div>
@@ -131,7 +131,7 @@
                         </div>
                     </div>
                     <div class="form-group">
-                        <label for="payment">Bayar</label>
+                        <label for="payment">Bayar (F9)</label>
                         <input type="number" class="form-control" id="payment" name="payment">
                     </div>
                     <div class="form-group">
@@ -139,7 +139,7 @@
                         <input type="number" class="form-control" id="return" readonly name="return">
                     </div>
                     <div class="form-group">
-                        <button type="submit" class="btn btn-primary" id="tPayment" disabled> Bayar</button>
+                        <button type="submit" class="btn btn-primary" id="tPayment" disabled> Bayar (Enter)</button>
                     </div>
                 </form>
             </div>
@@ -228,7 +228,37 @@
                 });
         })
         const addToCart = document.getElementById('addToCart');
+        $(function() {
+            $(document).keydown(function(e) {
+                if (!$("#addToCart").is(":disabled")) {
+                    switch(e.which) { 
+                    case 119: // up key
+                        tambahkan();
+                    } 
+                }
+                if (!$("#tPayment").is(":disabled")) {
+                    switch(e.which) { 
+                    case 13: // up key
+                        $('#tPayment').trigger('click');
+                    } 
+                }
+                switch(e.which) { 
+                case 120:
+                    $("#payment").focus();
+                }
+                // switch(e.which) { 
+                // case 13:
+                //     $('.select2-selection.select2-selection--single').trigger('click');
+                //     console.log('bisa');
+                // }
+                
+
+            });
+        });
         addToCart.addEventListener('click', function() {
+            tambahkan();
+        })
+        function tambahkan() {
             $productCode = $('#get_product_code');
             $productQuantity = $('#get_product_quantity');
             $productDiscRp = $('#get_product_disc_rp');
@@ -259,7 +289,7 @@
                     console.log('gagal');
                 }
             })
-        })
+        }
     
         const customer_container = document.querySelector('.table');
         const thumbs = document.querySelectorAll('tombol');
@@ -444,5 +474,6 @@
         //     vReturn.value = result;
         // })
     })     
+    
   </script>
 @endpush

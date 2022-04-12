@@ -32,13 +32,13 @@ class SupplyController extends Controller
 
     public function generateUniqueCode()
     {
-        $characters = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        $characters = '0123456789ABCDEFGHJKLMNPQRSTUVWXYZ';
         $charactersNumber = strlen($characters);
-        $codeLength = 6;
+        $codeLength = 10;
 
         $code = '';
 
-        while (strlen($code) < 6) {
+        while (strlen($code) < $codeLength) {
         $position = rand(0, $charactersNumber - 1);
         $character = $characters[$position];
         $code = $code.$character;
