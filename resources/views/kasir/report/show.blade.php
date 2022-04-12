@@ -11,7 +11,7 @@
               <a href="{{ route('kasir.report.print', $transaction->id) }}" target="_blank" class="btn btn-primary">Cetak Nota</a>
             </div>
             <div class="row justify-content-between d-flex d-inline">
-              <a href="{{ url()->previous() }}"><i class="fas fa-arrow-left"> Kembali</i></a>
+              <a href="{{ route('kasir.report.index') }}"><i class="fas fa-arrow-left"> Kembali</i></a>
             </div>
           </div>
         <hr>

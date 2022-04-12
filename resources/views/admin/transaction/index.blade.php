@@ -61,10 +61,8 @@
                         <label for="get_product_total">Total Harga</label>
                         <input type="text" id="get_product_total" disabled placeholder="Total Harga" class="form-control">
                     </div>
-                    <div class="col-3">
-                        <div class="col-4" style="margin-top: 10px;">
-                            <input type="button" value="Tambahkan (F8)" id="addToCart" disabled class="btn btn-primary text-white">
-                        </div>
+                    <div class="col-3" style="margin-top:10px;">
+                        <input type="button" value="Tambahkan (F8)" id="addToCart" disabled class="btn btn-primary text-white">
                     </div>
                 </div>
                 <div class="table-responsive mt-3">
@@ -246,13 +244,6 @@
                 case 120:
                     $("#payment").focus();
                 }
-                // switch(e.which) { 
-                // case 13:
-                //     $('.select2-selection.select2-selection--single').trigger('click');
-                //     console.log('bisa');
-                // }
-                
-
             });
         });
         addToCart.addEventListener('click', function() {
