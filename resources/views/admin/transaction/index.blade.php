@@ -137,7 +137,7 @@
                         <input type="number" class="form-control" id="return" readonly name="return">
                     </div>
                     <div class="form-group">
-                        <button type="submit" class="btn btn-primary" id="tPayment" disabled> Bayar (Enter)</button>
+                        <button type="submit" class="btn btn-primary" id="tPayment" disabled> Bayar (F10)</button>
                     </div>
                 </form>
             </div>
@@ -236,7 +236,7 @@
                 }
                 if (!$("#tPayment").is(":disabled")) {
                     switch(e.which) { 
-                    case 13: // up key
+                    case 121: // up key
                         $('#tPayment').trigger('click');
                     } 
                 }
