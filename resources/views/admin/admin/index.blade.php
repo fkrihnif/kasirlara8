@@ -13,6 +13,9 @@
             <table class="table table-bordered" id="dataTable">
               <thead class=" text-primary">
                 <th>
+                    No
+                </th>
+                <th>
                   Nama
                 </th>
                 <th>
@@ -23,8 +26,12 @@
                 </th>
               </thead>
               <tbody>
+                  @php
+                      $i = 1;
+                  @endphp
                   @foreach($admins as $admin)
                   <tr>
+                      <td>{{ $i++ }}</td>
                       <td>{{ $admin->name }}</td>
                       <td>{{ $admin->email }}</td>
                       <td>

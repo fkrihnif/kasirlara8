@@ -111,7 +111,10 @@
                         @foreach($transactionGet as $key => $transaction)
                         <tr>
                             <td>{{ $key+1 }}</td>
-                            <td>{{ $transaction->transaction_code }}  <a href="{{ route('admin.report.show', $transaction->id) }}"><i class="fas fa-eye"></i></a></td>
+                            <td>{{ $transaction->transaction_code }}  <a href="{{ route('admin.report.show', $transaction->id) }}"><i class="fas fa-eye"></i></a>
+                            
+                                <div style="font-size: 75%">{{ $transaction->user->name }}</div>
+                            </td>
                             <td>{{ date('d M Y H:i:s', strtotime($transaction->created_at)) }}</td>
                             <td>@currency($transaction->purchase_order)</td>
                         </tr>

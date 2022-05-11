@@ -157,7 +157,7 @@
                         <div class="col-3">
                             <div class="form-group">
                                 <label for="quantity">Jumlah</label>
-                                <input type="number" class="form-control @error('quantity') is-invalid @enderror" id="quantity" name="quantity[]" value="{{ old('quantity') }}" required>
+                                <input type="number" class="form-control @error('quantity') is-invalid @enderror" id="quantity" name="quantity[]" value="{{ old('quantity') }}" required autocomplete="off">
                                 @error('quantity')
                                 <div class="invalid-feedback">
                                     {{$message}}
@@ -167,8 +167,8 @@
                         </div>
                         <div class="col-3">
                             <div class="form-group">
-                                <label for="price">Harga Satuan</label>
-                                <input type="number" class="form-control @error('price') is-invalid @enderror" id="price" name="price[]" value="{{ old('price') }}" required>
+                                <label for="price">Harga Modal</label>
+                                <input type="number" class="form-control @error('price') is-invalid @enderror" id="price" name="price[]" value="{{ old('price') }}" required autocomplete="off">
                                 @error('price')
                                 <div class="invalid-feedback">
                                     {{$message}}
@@ -260,7 +260,7 @@
                             <div class="col-3">
                                 <div class="form-group">
                                     <label for="quantity">Jumlah</label>
-                                    <input type="number" class="form-control @error('quantity') is-invalid @enderror" id="quantity" name="quantity[]" value="{{ old('quantity') }}" required>
+                                    <input type="number" class="form-control @error('quantity') is-invalid @enderror" id="quantity" name="quantity[]" value="{{ old('quantity') }}" required autocomplete="off">
                                     @error('quantity')
                                     <div class="invalid-feedback">
                                         {{$message}}
@@ -270,8 +270,8 @@
                             </div>
                             <div class="col-3">
                                 <div class="form-group">
-                                    <label for="price">Harga Satuan</label>
-                                    <input type="number" class="form-control @error('price') is-invalid @enderror" id="price" name="price[]" value="{{ old('price') }}" required>
+                                    <label for="price">Harga Modal</label>
+                                    <input type="number" class="form-control @error('price') is-invalid @enderror" id="price" name="price[]" value="{{ old('price') }}" required autocomplete="off">
                                     @error('price')
                                     <div class="invalid-feedback">
                                         {{$message}}

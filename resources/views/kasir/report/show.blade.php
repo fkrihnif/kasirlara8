@@ -45,7 +45,7 @@
                       <td>Pembayaran</td>
                       <td> : </td>
                       <td>@if ($transaction->customer_name != null or $transaction->account_number != null)
-                          Kartu Kredit
+                          {{ $transaction->payment_method }}
                           @else
                           Tunai
                         @endif
@@ -53,10 +53,10 @@
                     </tr>
                     <tr>
                       @if ($transaction->customer_name != null or $transaction->account_number != null)
-                        <td>ATM</td>
+                        <td>Bank/Nama - No Rek</td>
                         <td> : </td>
                         <td>{{ $transaction->customer_name ?? '' }} 
-                         | {{ $transaction->account_number ?? '' }}
+                         - {{ $transaction->account_number ?? '' }}
                         </td>
                       @endif
                     </tr>
@@ -91,7 +91,7 @@
                 @foreach($productTransactions as $key => $product)
                 <tr>
                   <td>{{ $key+1 }}</td>
-                  <td>{{ $product->product->name }}</td>
+                  <td>{{ $product->product->name }} - {{ $product->product->product_code }}</td>
                   <td>{{ $product->quantity }}</td>
                   @php
                       if ($product->quantity >= 1 && $product->quantity<=2) {

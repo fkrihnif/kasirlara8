@@ -13,6 +13,9 @@
             <table class="table table-bordered" id="dataTable">
               <thead class=" text-primary">
                 <th>
+                    No
+                </th>
+                <th>
                   Nama
                 </th>
                 <th>
@@ -20,8 +23,12 @@
                 </th>
               </thead>
               <tbody>
+                  @php
+                      $i = 1;
+                  @endphp
                   @foreach($categories as $category)
                   <tr>
+                      <td>{{ $i++ }}</td>
                       <td>{{ $category->name }}</td>
                       <td>
                           <a href="#" data-id="{{ $category->id }}" data-name="{{ $category->name }}" data-toggle="modal" data-target="#edit"><i class="fas fa-edit"></i></a>

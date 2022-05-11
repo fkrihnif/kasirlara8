@@ -13,6 +13,9 @@
             <table class="table table-bordered" id="dataTable">
               <thead class=" text-primary">
                 <th>
+                    No
+                </th>
+                <th>
                   Nama
                 </th>
                 <th>
@@ -23,8 +26,12 @@
                 </th>
               </thead>
               <tbody>
+                  @php
+                      $i = 1;
+                  @endphp
                   @foreach($cashiers as $cashier)
                   <tr>
+                      <td>{{ $i++ }}</td>
                       <td>{{ $cashier->name }}</td>
                       <td>{{ $cashier->email }}</td>
                       <td>
@@ -57,7 +64,7 @@
                 <div class="modal-body">
                     <div class="form-group">
                         <label for="name">Nama</label>
-                        <input type="text" class="form-control @error('name') is-invalid @enderror" id="name" name="name" required>
+                        <input type="text" class="form-control @error('name') is-invalid @enderror" id="name" name="name" required autocomplete="off">
                         @error('name')
                         <div class="invalid-feedback">
                             {{$message}}
@@ -66,8 +73,17 @@
                     </div>
                     <div class="form-group">
                         <label for="email">Email</label>
-                        <input type="text" class="form-control @error('email') is-invalid @enderror" id="email" name="email" required>
+                        <input type="text" class="form-control @error('email') is-invalid @enderror" id="email" name="email" required autocomplete="off">
                         @error('email')
+                        <div class="invalid-feedback">
+                            {{$message}}
+                        </div>
+                        @enderror
+                    </div>
+                    <div class="form-group">
+                        <label for="password">Ganti Password</label>
+                        <input type="text" class="form-control @error('password') is-invalid @enderror" id="password" name="password">
+                        @error('password')
                         <div class="invalid-feedback">
                             {{$message}}
                         </div>
@@ -124,7 +140,7 @@
                 <div class="modal-body">
                     <div class="form-group">
                         <label for="name">Nama</label>
-                        <input type="text" class="form-control @error('name') is-invalid @enderror" id="name" name="name" required>
+                        <input type="text" class="form-control @error('name') is-invalid @enderror" id="name" name="name" required autocomplete="off">
                         @error('name')
                         <div class="invalid-feedback">
                             {{$message}}
@@ -133,7 +149,7 @@
                     </div>
                     <div class="form-group">
                         <label for="email">Email</label>
-                        <input type="text" class="form-control @error('email') is-invalid @enderror" id="email" name="email" required>
+                        <input type="text" class="form-control @error('email') is-invalid @enderror" id="email" name="email" required autocomplete="off">
                         @error('email')
                         <div class="invalid-feedback">
                             {{$message}}

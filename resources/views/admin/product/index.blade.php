@@ -90,7 +90,7 @@
                     </div>
                     <div class="form-group">
                         <label for="name">Nama</label>
-                        <input type="text" class="form-control @error('name') is-invalid @enderror" id="name" name="name" required>
+                        <input type="text" class="form-control @error('name') is-invalid @enderror" id="name" name="name" required autocomplete="off">
                         @error('name')
                         <div class="invalid-feedback">
                             {{$message}}
@@ -113,7 +113,7 @@
                     </div>
                     <div class="form-group">
                         <label for="quantity">Jumlah</label>
-                        <input type="number" class="form-control @error('quantity') is-invalid @enderror" id="quantity" name="quantity" required>
+                        <input type="number" class="form-control @error('quantity') is-invalid @enderror" id="quantity" name="quantity" required autocomplete="off">
                         @error('quantity')
                         <div class="invalid-feedback">
                             {{$message}}
@@ -124,7 +124,7 @@
                         <div class="col-4">
                             <div class="form-group">
                                 <label for="price">Harga 1</label>
-                                <input type="number" class="form-control @error('price') is-invalid @enderror" id="price" name="price" required>
+                                <input type="number" class="form-control @error('price') is-invalid @enderror" id="price" name="price" required autocomplete="off">
                                 @error('price')
                                 <div class="invalid-feedback">
                                     {{$message}}
@@ -135,7 +135,7 @@
                         <div class="col-4">
                             <div class="form-group">
                                 <label for="price3">Harga 3</label>
-                                <input type="number" class="form-control @error('price3') is-invalid @enderror" id="price3" name="price3" required>
+                                <input type="number" class="form-control @error('price3') is-invalid @enderror" id="price3" name="price3" required autocomplete="off">
                                 @error('price3')
                                 <div class="invalid-feedback">
                                     {{$message}}
@@ -146,7 +146,7 @@
                         <div class="col-4">
                             <div class="form-group">
                                 <label for="price6">Harga 6</label>
-                                <input type="number" class="form-control @error('price6') is-invalid @enderror" id="price6" name="price6" required>
+                                <input type="number" class="form-control @error('price6') is-invalid @enderror" id="price6" name="price6" required autocomplete="off">
                                 @error('price6')
                                 <div class="invalid-feedback">
                                     {{$message}}
@@ -250,7 +250,7 @@
                     </label>
                     <div class="form-group">
                         <label for="product_code">Kode Produk</label>
-                        <input type="text" class="form-control @error('product_code') is-invalid @enderror" id="product_code" name="product_code" value="{{ old('product_code') }}">
+                        <input type="text" class="form-control @error('product_code') is-invalid @enderror" id="product_code" name="product_code" value="{{ old('product_code') }}" autocomplete="off">
                         @error('product_code')
                         <div class="invalid-feedback">
                             {{$message}}
@@ -259,7 +259,7 @@
                     </div>
                     <div class="form-group">
                         <label for="name">Nama</label>
-                        <input type="text" class="form-control @error('name') is-invalid @enderror" id="name" name="name" value="{{ old('name') }}" required>
+                        <input type="text" class="form-control @error('name') is-invalid @enderror" id="name" name="name" value="{{ old('name') }}" required autocomplete="off">
                         @error('name')
                         <div class="invalid-feedback">
                             {{$message}}
@@ -282,7 +282,7 @@
                     </div>
                     <div class="form-group">
                         <label for="quantity">Jumlah</label>
-                        <input type="number" class="form-control @error('quantity') is-invalid @enderror" id="quantity" name="quantity" value="0" required>
+                        <input type="number" class="form-control @error('quantity') is-invalid @enderror" id="quantity" name="quantity" value="0" required autocomplete="off">
                         @error('quantity')
                         <div class="invalid-feedback">
                             {{$message}}
@@ -293,7 +293,7 @@
                         <div class="col-4">
                             <div class="form-group">
                                 <label for="price">Harga 1</label>
-                                <input type="number" class="form-control @error('price') is-invalid @enderror" id="price" name="price" value="{{ old('price') }}" required>
+                                <input type="number" class="form-control @error('price') is-invalid @enderror" id="price" name="price" value="{{ old('price') }}" required autocomplete="off">
                                 @error('price')
                                 <div class="invalid-feedback">
                                     {{$message}}
@@ -304,7 +304,7 @@
                         <div class="col-4">
                             <div class="form-group">
                                 <label for="price3">Harga 3</label>
-                                <input type="number" class="form-control @error('price3') is-invalid @enderror" id="price3" name="price3" value="{{ old('price3') }}" required>
+                                <input type="number" class="form-control @error('price3') is-invalid @enderror" id="price3" name="price3" value="{{ old('price3') }}" required autocomplete="off">
                                 @error('price3')
                                 <div class="invalid-feedback">
                                     {{$message}}
@@ -315,7 +315,7 @@
                         <div class="col-4">
                             <div class="form-group">
                                 <label for="price6">Harga 6</label>
-                                <input type="number" class="form-control @error('price6') is-invalid @enderror" id="price6" name="price6" value="{{ old('price6') }}" required>
+                                <input type="number" class="form-control @error('price6') is-invalid @enderror" id="price6" name="price6" value="{{ old('price6') }}" required autocomplete="off">
                                 @error('price6')
                                 <div class="invalid-feedback">
                                     {{$message}}

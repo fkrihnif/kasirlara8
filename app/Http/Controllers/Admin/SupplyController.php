@@ -107,6 +107,15 @@ class SupplyController extends Controller
     public function delete(Request $request)
     {
         $supply = Supply::find($request->id);
+        $productSupplies = ProductSupply::where('supply_id', $request->id)->pluck('id');
+        
+        for($i = 0; $i < count($productSupplies); $i++){
+            $getQuantity = ProductSupply::where('id', $productSupplies[$i])->first()->quantity;
+            $getProductId = ProductSupply::where('id', $productSupplies[$i])->first()->product_id;
+            $produk = Product::find($getProductId);
+            $quantity = $produk->quantity - $getQuantity;
+            $produk->update(['quantity' => $quantity]);
+        }
         $supply->delete();
         toast('Data pasok berhasil dihapus')->autoClose(2000)->hideCloseButton();
         return redirect()->back()->with('success','Berhasil menghapus data pembelian');

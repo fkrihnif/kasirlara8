@@ -11,7 +11,7 @@ class CashierController extends Controller
 {
     public function index()
     {
-        $cashiers = User::where('role','cashier')->get();
+        $cashiers = User::where('role','cashier')->orderBy('id', 'DESC')->get();
         return view('admin.cashier.index', compact('cashiers'));
     }
     public function store(Request $request)
@@ -34,10 +34,20 @@ class CashierController extends Controller
             'email' => 'required|unique:users,email,'. $request->id,
         ]);
         $user = User::find($request->id);
-        $user->update([
-            'name' => $request->name,
-            'email' => $request->email,
-        ]);
+        $password = $request->password;
+        if ($password == null) {
+            $user->update([
+                'name' => $request->name,
+                'email' => $request->email,
+            ]);
+        } else {
+            $user->update([
+                'name' => $request->name,
+                'email' => $request->email,
+                'password' => bcrypt($password),
+            ]);
+        }
+     
         toast('Data Kasir berhasil diubah')->autoClose(2000)->hideCloseButton();
         return redirect()->back();
     }

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\ProductTransaction;
 use App\Models\Transaction;
+use App\Models\Product;
 use Facade\Ignition\Tabs\Tab;
 use Illuminate\Http\Request;
 
@@ -43,6 +44,15 @@ class ReportController extends Controller
     public function delete(Request $request)
     {
         $transaction = Transaction::find($request->id);
+        $productTransactions = ProductTransaction::where('transaction_id', $request->id)->pluck('id');
+        
+        for($i = 0; $i < count($productTransactions); $i++){
+            $getQuantity = ProductTransaction::where('id', $productTransactions[$i])->first()->quantity;
+            $getProductId = ProductTransaction::where('id', $productTransactions[$i])->first()->product_id;
+            $produk = Product::find($getProductId);
+            $quantity = $produk->quantity + $getQuantity;
+            $produk->update(['quantity' => $quantity]);
+        }
         $transaction->delete();
         toast('Laporan transaksi berhasil dihapus')->autoClose(2000)->hideCloseButton();
         return redirect()->back();

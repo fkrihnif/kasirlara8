@@ -31,12 +31,6 @@
               <p>Laporan Penjualan</p>
             </a>
           </li>
-          <li class="nav-item {{ request()->is('kasir/profile') ?'active' : '' }}">
-            <a href="{{ route('kasir.profile.index') }}">
-              <i class="now-ui-icons business_badge"></i>
-              <p>Akun Saya</p>
-            </a>
-          </li>
         </ul>
       </div>
     </div>

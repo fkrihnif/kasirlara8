@@ -41,6 +41,7 @@
                 <th>No</th>
                 <th>Kode Transaksi</th>
                 <th>Online/Offline</th>
+                <th>Metode Pembayaran</th>
                 <th>Total Penjualan</th>
                 <th>Tanggal</th>
                 <th>Aksi</th>
@@ -52,8 +53,17 @@
                   @foreach($transactions as $key => $transaction)
                   <tr>
                       <td>{{ $key+1 }}</td>
-                      <td>{{ $transaction->transaction_code }}</td>
+                      <td>{{ $transaction->transaction_code }} <div style="font-size: 75%">{{ $transaction->user->name }}</div></td>
                       <td>{{ $transaction->method }}</td>
+                      <td>
+                        @if ($transaction->customer_name != null or $transaction->account_number != null)
+                          {{ $transaction->payment_method }} <br>
+                          {{ $transaction->customer_name ?? '' }} 
+                         - {{ $transaction->account_number ?? '' }}
+                          @else
+                          Tunai
+                        @endif
+                      </td>
                       <td>@currency($transaction->purchase_order)</td>
                       <td>{{ date('d M Y H:i:s', strtotime($transaction->created_at)) }}</td>
                       <td>

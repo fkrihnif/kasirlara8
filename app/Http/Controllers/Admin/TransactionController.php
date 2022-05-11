@@ -202,6 +202,7 @@ class TransactionController extends Controller
                 $transaction->return = $request->return;
                 $transaction->totalSementara = $totalPurchase;
                 $transaction->purchase_order = $totalPurchaseFinal;
+                $transaction->payment_method = $request->payment_method ?? null;
                 $transaction->customer_name = $request->customer_name ?? null;
                 $transaction->account_number = $request->account_number;
                 $transaction->disc_total_rp = $request->get_total_disc_rp;

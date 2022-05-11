@@ -100,9 +100,18 @@
                         <input type="radio" name="method" id="method" value="online"> Online
                     </label>
                     <a class="btn btn-primary btn-sm" data-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
-                        Kartu
+                        Metode Pembayaran
                     </a>
                       <div class="collapse" id="collapseExample">
+                        <label>
+                            <input type="checkbox" name="payment_method" id="payment_method" value="Kartu"> Kartu
+                        </label> |
+                        <label>
+                            <input type="checkbox" name="payment_method" id="payment_method" value="Transfer"> Transfer
+                        </label> |
+                        <label>
+                            <input type="checkbox" name="payment_method" id="payment_method" value="QR Code"> QR Code
+                        </label>
                         <div class="card card-body">
                             <div class="form-group">
                                 <label for="customer_name" id="l_customer_name">Bank/Nama</label>

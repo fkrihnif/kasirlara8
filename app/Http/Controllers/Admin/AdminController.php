@@ -12,7 +12,7 @@ class AdminController extends Controller
 {
     public function index()
     {
-        $admins = User::where('role','admin')->get();
+        $admins = User::where('role','admin')->orderBy('id', 'DESC')->get();
         return view('admin.admin.index', compact('admins'));
     }
     public function store(Request $request)

@@ -72,7 +72,7 @@ th.price {
             <div style="font-size: 90%">{{ $transactionn->user->name }}</div>
           
             <div style="font-size: 90%">{{$transactionn->transaction_code}} -   @if ($transactionn->customer_name != null or $transactionn->account_number != null)
-                Card
+                {{ $transactionn->payment_method }}
                               @else
                 Cash
                 @endif </div>
