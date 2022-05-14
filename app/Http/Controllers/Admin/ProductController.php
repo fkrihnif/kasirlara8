@@ -51,6 +51,7 @@ class ProductController extends Controller
         }
         $product->name = $request->get('name');
         $product->quantity = $request->get('quantity');
+        $product->modal = $request->get('modal');
         $product->price = $request->get('price');
         $product->price3 = $request->get('price3');
         $product->price6 = $request->get('price6');
@@ -70,6 +71,7 @@ class ProductController extends Controller
         $product->product_code = $request->get('product_code');
         $product->name = $request->get('name');
         $product->quantity = $request->get('quantity');
+        $product->modal = $request->get('modal');
         $product->price = $request->get('price');
         $product->price3 = $request->get('price3');
         $product->price6 = $request->get('price6');

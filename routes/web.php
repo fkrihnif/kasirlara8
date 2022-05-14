@@ -6,6 +6,7 @@ use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\KasirController;
 use App\Http\Controllers\Admin\ProductController;
+use App\Http\Controllers\Admin\OpnameController;
 use App\Http\Controllers\Admin\ProfilController;
 use App\Http\Controllers\Admin\ReportController;
 use App\Http\Controllers\Admin\SettingController;
@@ -64,6 +65,11 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'isAdmin'])->group(f
         Route::put('cetak-barcode', [ProductController::class, 'print'])->name('printBarcode');
         Route::delete('delete', [ProductController::class, 'delete'])->name('delete');
     });
+    Route::prefix('opname')->name('opname.')->group(function () {
+        Route::get('', [OpnameController::class, 'index'])->name('index');
+        Route::post('store', [OpnameController::class, 'store'])->name('store');
+        Route::delete('delete', [OpnameController::class, 'delete'])->name('delete');
+    });
     Route::prefix('supply')->name('supply.')->group(function () {
         Route::get('', [SupplyController::class, 'index'])->name('index');
         Route::post('store', [SupplyController::class, 'store'])->name('store');
@@ -71,6 +77,7 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'isAdmin'])->group(f
         Route::delete('delete', [SupplyController::class, 'delete'])->name('delete');
         Route::get('show/{id}', [SupplyController::class, 'show'])->name('show');
         Route::get('print/{id}', [SupplyController::class, 'print'])->name('print');
+        Route::post('storeNew', [SupplyController::class, 'storeNew'])->name('storeNew');
     });
     Route::prefix('transaction')->name('transaction.')->group(function () {
         Route::get('', [TransactionController::class, 'index'])->name('index');

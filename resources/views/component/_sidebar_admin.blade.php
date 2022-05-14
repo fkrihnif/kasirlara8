@@ -39,8 +39,14 @@
           </li>
           <li class="nav-item {{ request()->is('admin/product') ?'active' : '' }}">
             <a href="{{ route('admin.product.index') }}">
-              <i class="now-ui-icons design_palette"></i>
+              <i class="now-ui-icons shopping_box"></i>
               <p>Produk</p>
+            </a>
+          </li>
+          <li class="nav-item {{ request()->is('admin/opname') ?'active' : '' }}">
+            <a href="{{ route('admin.opname.index') }}">
+              <i class="now-ui-icons files_paper"></i>
+              <p>Data Opname</p>
             </a>
           </li>
           <li class="nav-item {{ request()->is('admin/supply') ?'active' : '' }}">

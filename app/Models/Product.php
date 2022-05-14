@@ -24,4 +24,8 @@ class Product extends Model
     {
         return $this->hasMany(ProductTransaction::class);
     }
+    public function opname()
+    {
+        return $this->hasMany(Opname::class);
+    }
 }

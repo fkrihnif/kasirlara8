@@ -50,7 +50,7 @@
                       <td>@currency($product->price) x1 <br> @currency($product->price3) x3 <br> @currency($product->price6) x6</td>
                       <td>
                           <a href="#" data-id="{{ $product->id }}" data-name="{{ $product->name }}"
-                            data-code="{{ $product->product_code }}" data-quantity="{{ $product->quantity }}" data-price="{{ $product->price }}" data-price3="{{ $product->price3 }}" data-price6="{{ $product->price6 }}" data-category="{{ $product->category_id }}"  data-toggle="modal" data-target="#edit"><i class="fas fa-edit"></i></a>
+                            data-code="{{ $product->product_code }}" data-quantity="{{ $product->quantity }}" data-modal="{{ $product->modal }}" data-price="{{ $product->price }}" data-price3="{{ $product->price3 }}" data-price6="{{ $product->price6 }}" data-category="{{ $product->category_id }}"  data-toggle="modal" data-target="#edit"><i class="fas fa-edit"></i></a>
                           <a href="#" data-target="#delete" data-toggle="modal" data-id="{{ $product->id }}"><i class="fas fa-trash"></i></a>
                           <a href="#" data-id="{{ $product->id }}" data-toggle="modal" data-target="#print"><i class="fas fa-print"></i></a>
                       </td>
@@ -115,6 +115,15 @@
                         <label for="quantity">Jumlah</label>
                         <input type="number" class="form-control @error('quantity') is-invalid @enderror" id="quantity" name="quantity" required autocomplete="off">
                         @error('quantity')
+                        <div class="invalid-feedback">
+                            {{$message}}
+                        </div>
+                        @enderror
+                    </div>
+                    <div class="form-group">
+                        <label for="modal">Harga Modal</label>
+                        <input type="number" class="form-control @error('modal') is-invalid @enderror" id="modal" name="modal" autocomplete="off">
+                        @error('modal')
                         <div class="invalid-feedback">
                             {{$message}}
                         </div>
@@ -289,6 +298,15 @@
                         </div>
                         @enderror
                     </div>
+                    <div class="form-group">
+                        <label for="modal">Harga Modal</label>
+                        <input type="number" class="form-control @error('modal') is-invalid @enderror" id="modal" name="modal" value="{{ old('modal') }}" autocomplete="off">
+                        @error('modal')
+                        <div class="invalid-feedback">
+                            {{$message}}
+                        </div>
+                        @enderror
+                    </div>
                     <div class="row input_fields_wrap">
                         <div class="col-4">
                             <div class="form-group">
@@ -345,6 +363,7 @@
         var code = $(e.relatedTarget).data('code');
         var name = $(e.relatedTarget).data('name');
         var quantity = $(e.relatedTarget).data('quantity');
+        var modal = $(e.relatedTarget).data('modal');
         var price = $(e.relatedTarget).data('price');
         var price3 = $(e.relatedTarget).data('price3');
         var price6 = $(e.relatedTarget).data('price6');
@@ -354,6 +373,7 @@
         $('#edit').find('input[name="product_code"]').val(code);
         $('#edit').find('input[name="name"]').val(name);
         $('#edit').find('input[name="quantity"]').val(quantity);
+        $('#edit').find('input[name="modal"]').val(modal);
         $('#edit').find('input[name="price"]').val(price);
         $('#edit').find('input[name="price3"]').val(price3);
         $('#edit').find('input[name="price6"]').val(price6);

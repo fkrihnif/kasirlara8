@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Product;
 use App\Models\ProductSupply;
 use App\Models\Supply;
+use App\Models\Category;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -26,8 +27,9 @@ class SupplyController extends Controller
         } else {
             $supplies = Supply::orderBy('id', 'DESC')->get();
         }
+        $categories = Category::all();
         $products = Product::orderBy('id', 'DESC')->get();
-        return view('admin.supply.index', compact('supplies','products'));
+        return view('admin.supply.index', compact('supplies','products', 'categories'));
     }
 
     public function generateUniqueCode()
@@ -46,6 +48,27 @@ class SupplyController extends Controller
 
         if (Supply::where('code', $code)->exists()) {
         $this->generateUniqueCode();
+        }
+        return $code;
+    }
+
+    public function generateUniqueCodeProduct()
+    {
+        $randomNumber = random_int(10000, 99999);
+        $characters = 'ABCDEFGHJKLMNPRSTUVWXYZ';
+        $charactersNumber = strlen($characters);
+        
+        $char = '';
+        while (strlen($char) < 1) {
+            $position = rand(0, $charactersNumber - 1);
+            $character = $characters[$position];
+            $char = $char.$character;
+        }
+
+        $code = $char.$randomNumber;
+
+        if (Product::where('product_code', $code)->exists()) {
+        $this->generateUniqueCodeProduct();
         }
         return $code;
     }
@@ -80,7 +103,8 @@ class SupplyController extends Controller
                 $productId = Product::where('product_code', $request->product_code[$i])->first()->id;
                 $produk = Product::find($productId);
                 $result = $produk->quantity + $request->quantity[$i];
-                $produk->update(['quantity' => $result]);
+                $modal = $request->price[$i];
+                $produk->update(['quantity' => $result, 'modal' => $modal]);
                 ProductSupply::create([
                     'supply_id' => $supply->id,
                     'product_id' => $productId,
@@ -104,6 +128,7 @@ class SupplyController extends Controller
         }
        
     }
+       
     public function delete(Request $request)
     {
         $supply = Supply::find($request->id);
@@ -186,5 +211,66 @@ class SupplyController extends Controller
         };
 
         return view('admin.supply.print1', compact('supply', 'product_supplies', 'jumlah', 'quantity'));
+    }
+
+    public function storeNew(Request $request)
+    {
+        DB::beginTransaction();
+
+        if ($request->supplier_name == null) {
+            $supplier_name = '-';
+        } else {
+            $supplier_name = $request->supplier_name;
+        }
+
+        if ($request->supply_date == null) {
+            $supply_date = date('Y-m-d');
+        } else {
+            $supply_date = $request->supply_date;
+        }
+
+        try {
+            $supply = Supply::create([
+                'user_id' => auth()->user()->id,
+                'code' => $this->generateUniqueCode(),
+                'supplier_name' => $supplier_name,
+                'supply_date' => $supply_date,
+                'total' => ''
+                
+            ]);
+            $total = [];
+            for($i = 0; $i < count($request->product_name); $i++){
+                $product = Product::create([
+                    'product_code' => $this->generateUniqueCodeProduct(),
+                    'name' => $request->product_name[$i],
+                    'quantity' => $request->quantity[$i],
+                    'modal' => $request->price[$i],
+                    'price' => $request->price1[$i],
+                    'price3' => $request->price3[$i],
+                    'price6' => $request->price6[$i],
+                    'category_id' => $request->category_id[$i],
+                ]);
+                ProductSupply::create([
+                    'supply_id' => $supply->id,
+                    'product_id' => $product->id,
+                    'quantity' => $request->quantity[$i],
+                    'price' => $request->price[$i]
+                ]);
+                $total[] = $request->quantity[$i] * $request->price[$i];
+            } 
+            //coba tambahkan total di Supply
+            $totalFinal = array_sum($total);
+            $s = Supply::find($supply->id);
+            $s->total = $totalFinal;
+            $s->save();
+            DB::commit();
+            toast('Data Pembelian berhasil ditambahkan')->autoClose(2000)->hideCloseButton();
+            return redirect()->back();
+        } catch (\Exception $e) {
+            DB::rollback();
+            toast('Gagal menambah data pembelian')->autoClose(2000)->hideCloseButton();
+            return redirect()->back();
+        }
+       
     }
 }
