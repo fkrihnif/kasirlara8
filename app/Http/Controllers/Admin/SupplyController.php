@@ -113,7 +113,7 @@ class SupplyController extends Controller
                 ]);
                 $total[] = $request->quantity[$i] * $request->price[$i];
             } 
-            //coba tambahkan total di Supply
+            //coba tambahkan total di Supply 
             $totalFinal = array_sum($total);
             $s = Supply::find($supply->id);
             $s->total = $totalFinal;
