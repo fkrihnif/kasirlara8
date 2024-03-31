@@ -14,27 +14,44 @@
             </button>
         </div>
         <div class="card-body">
+                    <form action="{{ route('admin.product.index') }}">
+            
+                <div class="row">
+                        <div class="col-4">
+                            <label for="search_product">Cari Kode Produk / Nama :</label>
+                            <input type="text" id="search_product" name="search_product" value="{{Request::get('search_product')}}" class="form-control" autofocus>
+                        </div>
+                        <div class="col-4 mt-3">
+                            <input type="submit" value="Cari" class="btn btn-primary btn-sm text-white">
+                        </div>
+                </div>
+            </form>
+            <form action="{{ route('admin.product.index') }}">
+                <input type="submit" value="Lihat Semua Data" class="btn btn-warning text-white">
+            </form>
           <div class="table-responsive">
-            <table class="table table-bordered" id="dataTable">
+            <table class="table table-bordered">
               <thead class=" text-primary">
-                <th>
-                    No.
-                </th>
-                <th>
-                  Kode Produk
-                </th>
-                <th style="width: 30%">
-                  Nama
-                </th>
-                <th>
-                  Stok
-                </th>
-                <th>
-                  Harga 1 | 3 | 6
-                </th>
-                <th>
-                  Aksi
-                </th>
+                <tr>
+                    <td>
+                        No.
+                    </td>
+                    <td>
+                      Kode Produk
+                    </td>
+                    <td style="width: 30%">
+                      Nama
+                    </td>
+                    <td>
+                      Stok
+                    </td>
+                    <td>
+                      Harga 1 | 3 | 6
+                    </td>
+                    <td>
+                      Aksi
+                    </td>
+                </tr>
               </thead>
               <tbody>
                   <?php 
@@ -58,6 +75,7 @@
                   @endforeach
               </tbody>
             </table>
+            {{  $products->appends(request()->input())->links()}}
           </div>
         </div>
       </div>
@@ -277,7 +295,7 @@
                     </div>
                     <div class="form-group">
                         <label for="category_id">Kategori Produk</label>
-                        <select name="category_id" id="category_id" class="custom-select @error('category_id') is-invalid @enderror">
+                        <select name="category_id" id="category_id" class="custom-select @error('category_id') is-invalid @enderror" required>
                             <option value="">~ Pilih Kategori Produk ~</option>
                             @foreach($categories as $category)
                                 <option value="{{ $category->id }}">{{ $category->name }}</option>

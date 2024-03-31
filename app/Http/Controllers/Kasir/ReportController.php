@@ -9,9 +9,22 @@ use Illuminate\Http\Request;
 
 class ReportController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $transactions = Transaction::where('user_id', auth()->user()->id)->orderBy('id', 'DESC')->get();
+        $fromDate = $request->get('from_date');
+        $toDate = $request->get('to_date');
+        if ($fromDate) {
+            $transactions = Transaction::where('user_id', auth()->user()->id)->whereRaw(
+                "(created_at >= ? AND created_at <= ?)", 
+                [
+                   $fromDate ." 00:00:00", 
+                   $toDate ." 23:59:59"
+                ]
+              )->get();
+        } else {
+            $transactions = Transaction::where('user_id', auth()->user()->id)->whereDate('created_at', date('Y-m-d'))->orderBy('id', 'DESC')->get();
+        }
+        
         return view('kasir.report.index', compact('transactions'));
     }
     public function show($id)

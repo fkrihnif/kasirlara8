@@ -12,6 +12,7 @@
                 <i class="now-ui-icons loader_refresh"></i> Refresh
             </button>
         </div>
+        <i style="color: grey; font-size:90%" class="ml-3">Secara default menampilkan penjualan hari ini, silahkan filter tanggal untuk melakukan pencarian</i>
         <div class="card-body">
             <form action="{{ route('admin.report.index') }}">
             
@@ -32,11 +33,18 @@
             </div>
             </form>
             <form action="{{ route('admin.report.index') }}">
-                <input type="submit" value="Semua Data" class="btn btn-warning text-white">
+                <input type="submit" value="Lihat hari ini" class="btn btn-warning text-white">
             </form>
 
-          <div class="table-responsive">
-            <table class="table table-bordered" id="dataTable">
+            @if (Request::get('to_date'))
+            <p>Total Pendapatan dari Tanggal <br>{{ Request::get('from_date') }} sampai {{ Request::get('to_date') }} =<b> @currency($total_earn)</b></p>
+            @else
+            <p>Total Pendapatan Hari Ini :<b> @currency($total_earn)</b></p>
+            @endif
+
+
+            <div class="table-responsive">
+                <table class="table table-bordered" id="dataTable">
             <thead>
                 <th>No</th>
                 <th>Kode Transaksi</th>
@@ -47,9 +55,6 @@
                 <th>Aksi</th>
             </thead>
               <tbody>
-                @php
-                $totalOrder = [];
-                @endphp
                   @foreach($transactions as $key => $transaction)
                   <tr>
                       <td>{{ $key+1 }}</td>
@@ -71,16 +76,9 @@
                           <a href="#" data-target="#delete" data-toggle="modal" data-id="{{ $transaction->id }}"><i class="fas fa-trash"></i></a>
                       </td>
                   </tr>
-                  @php
-                  $totalOrder[] = $transaction->purchase_order;
-                  @endphp
+           
                   @endforeach
-                  
-                    @php
-                    $total = array_sum($totalOrder);
-                    @endphp
-                    <p>Total : @currency($total)</p>
-                  
+
               </tbody>
             </table>
           </div>
