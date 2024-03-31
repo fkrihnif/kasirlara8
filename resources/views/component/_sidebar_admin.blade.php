@@ -61,6 +61,12 @@
               <p>Transaksi</p>
             </a>
           </li>
+          <li class="nav-item {{ request()->is('admin/transaction-new') ?'active' : '' }}">
+            <a href="{{ route('admin.transaction-new.index') }}">
+              <i class="now-ui-icons shopping_cart-simple"></i>
+              <p>Transaksi 2</p>
+            </a>
+          </li>
           <li class="nav-item {{ request()->is('admin/report') ?'active' : '' }}">
             <a href="{{ route('admin.report.index') }}">
               <i class="now-ui-icons education_paper"></i>

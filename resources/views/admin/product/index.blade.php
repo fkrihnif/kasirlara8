@@ -57,20 +57,19 @@
                   <?php 
                     $i = 1;
                     ?>
-                  @foreach($products as $product)
-                  <tr>
-                      <td>{{ $i++ }}</td>
-                      <td>{{ $product->product_code }}
+                @foreach($products as $key => $product)
+                <tr>
+                    <td>{{ $products->firstItem() + $key }}</td>
+                    <td>{{ $product->product_code }}</td>
+                    <td>{{ $product->name }}</td>
+                    <td>{{ $product->quantity }}</td>
+                    <td>@currency($product->price) x1 <br> @currency($product->price3) x3 <br> @currency($product->price6) x6</td>
+                    <td>
+                        <a href="#" data-id="{{ $product->id }}" data-name="{{ $product->name }}"
+                        data-code="{{ $product->product_code }}" data-quantity="{{ $product->quantity }}" data-modal="{{ $product->modal }}" data-price="{{ $product->price }}" data-price3="{{ $product->price3 }}" data-price6="{{ $product->price6 }}" data-category="{{ $product->category_id }}"  data-toggle="modal" data-target="#edit"><i class="fas fa-edit"></i></a>
+                        <a href="#" data-target="#delete" data-toggle="modal" data-id="{{ $product->id }}"><i class="fas fa-trash"></i></a>
+                        <a href="#" data-id="{{ $product->id }}" data-toggle="modal" data-target="#print"><i class="fas fa-print"></i></a>
                     </td>
-                      <td>{{ $product->name }}</td>
-                      <td>{{ $product->quantity }}</td>
-                      <td>@currency($product->price) x1 <br> @currency($product->price3) x3 <br> @currency($product->price6) x6</td>
-                      <td>
-                          <a href="#" data-id="{{ $product->id }}" data-name="{{ $product->name }}"
-                            data-code="{{ $product->product_code }}" data-quantity="{{ $product->quantity }}" data-modal="{{ $product->modal }}" data-price="{{ $product->price }}" data-price3="{{ $product->price3 }}" data-price6="{{ $product->price6 }}" data-category="{{ $product->category_id }}"  data-toggle="modal" data-target="#edit"><i class="fas fa-edit"></i></a>
-                          <a href="#" data-target="#delete" data-toggle="modal" data-id="{{ $product->id }}"><i class="fas fa-trash"></i></a>
-                          <a href="#" data-id="{{ $product->id }}" data-toggle="modal" data-target="#print"><i class="fas fa-print"></i></a>
-                      </td>
                   </tr>
                   @endforeach
               </tbody>

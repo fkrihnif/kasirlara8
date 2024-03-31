@@ -12,10 +12,12 @@ use App\Http\Controllers\Admin\ReportController;
 use App\Http\Controllers\Admin\SettingController;
 use App\Http\Controllers\Admin\SupplyController;
 use App\Http\Controllers\Admin\TransactionController;
+use App\Http\Controllers\Admin\TransactionNewController;
 use App\Http\Controllers\Kasir\DashboardController as KasirDashboardController;
 use App\Http\Controllers\Kasir\ProfilController as KasirProfilController;
 use App\Http\Controllers\Kasir\ReportController as KasirReportController;
 use App\Http\Controllers\Kasir\TransactionController as KasirTransactionController;
+use App\Http\Controllers\Kasir\TransactionNewController as KasirTransactionNewController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -93,6 +95,22 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'isAdmin'])->group(f
         Route::post('pay', [TransactionController::class, 'pay'])->name('pay');
         Route::get('show/{id}', [TransactionController::class, 'show'])->name('show');
     });
+    Route::prefix('transaction-new')->name('transaction-new.')->group(function () {
+        Route::get('', [TransactionNewController::class, 'index'])->name('index');
+        Route::get('/api', [TransactionNewController::class, 'indexs'])->name('indexs');
+        Route::post('store', [TransactionNewController::class, 'store'])->name('store');
+        Route::put('update/{id}', [TransactionNewController::class, 'update'])->name('update');
+        Route::delete('delete', [TransactionNewController::class, 'delete'])->name('delete');
+        Route::get('show', [TransactionNewController::class, 'show'])->name('show');
+        Route::get('showLastProduct', [TransactionNewController::class, 'showLastProduct'])->name('showLastProduct');
+        Route::get('getProductCode', [TransactionNewController::class, 'getProductCode'])->name('getProductCode');
+        Route::post('addToCart', [TransactionNewController::class, 'addToCart'])->name('addToCart');
+        Route::delete('deleteLastProduct', [TransactionNewController::class, 'deleteLastProduct'])->name('deleteLastProduct');
+        Route::delete('deleteCart', [TransactionNewController::class, 'deleteCart'])->name('deleteCart');
+        Route::delete('deleteAllCart', [TransactionNewController::class, 'deleteAllCart'])->name('deleteAllCart');
+        Route::get('totalBuy', [TransactionNewController::class, 'totalBuy'])->name('totalBuy');
+        Route::post('pay', [TransactionNewController::class, 'pay'])->name('pay');
+    });
     Route::prefix('report')->name('report.')->group(function () {
         Route::get('', [ReportController::class, 'index'])->name('index');
         Route::get('show/{id}', [ReportController::class, 'show'])->name('show');
@@ -131,6 +149,22 @@ Route::prefix('kasir')->name('kasir.')->middleware(['auth', 'isCashier'])->group
         Route::get('totalBuy', [KasirTransactionController::class, 'totalBuy'])->name('totalBuy');
         Route::post('pay', [KasirTransactionController::class, 'pay'])->name('pay');
         Route::get('show/{id}', [KasirTransactionController::class, 'show'])->name('show');
+    });
+    Route::prefix('transaction-new')->name('transaction-new.')->group(function () {
+        Route::get('', [KasirTransactionNewController::class, 'index'])->name('index');
+        Route::get('/api', [KasirTransactionNewController::class, 'indexs'])->name('indexs');
+        Route::post('store', [KasirTransactionNewController::class, 'store'])->name('store');
+        Route::put('update/{id}', [KasirTransactionNewController::class, 'update'])->name('update');
+        Route::delete('delete', [KasirTransactionNewController::class, 'delete'])->name('delete');
+        Route::get('show', [KasirTransactionNewController::class, 'show'])->name('show');
+        Route::get('showLastProduct', [KasirTransactionNewController::class, 'showLastProduct'])->name('showLastProduct');
+        Route::get('getProductCode', [KasirTransactionNewController::class, 'getProductCode'])->name('getProductCode');
+        Route::post('addToCart', [KasirTransactionNewController::class, 'addToCart'])->name('addToCart');
+        Route::delete('deleteLastProduct', [KasirTransactionNewController::class, 'deleteLastProduct'])->name('deleteLastProduct');
+        Route::delete('deleteCart', [KasirTransactionNewController::class, 'deleteCart'])->name('deleteCart');
+        Route::delete('deleteAllCart', [KasirTransactionNewController::class, 'deleteAllCart'])->name('deleteAllCart');
+        Route::get('totalBuy', [KasirTransactionNewController::class, 'totalBuy'])->name('totalBuy');
+        Route::post('pay', [KasirTransactionNewController::class, 'pay'])->name('pay');
     });
     Route::prefix('report')->name('report.')->group(function () {
         Route::get('', [KasirReportController::class, 'index'])->name('index');

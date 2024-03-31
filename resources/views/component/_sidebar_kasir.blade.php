@@ -25,6 +25,12 @@
               <p>Transaksi</p>
             </a>
           </li>
+          <li class="nav-item {{ request()->is('kasir/transaction-new') ?'active' : '' }}">
+            <a href="{{ route('kasir.transaction-new.index') }}">
+              <i class="now-ui-icons shopping_cart-simple"></i>
+              <p>Transaksi 2</p>
+            </a>
+          </li>
           <li class="nav-item {{ request()->is('kasir/report') ?'active' : '' }}">
             <a href="{{ route('kasir.report.index') }}">
               <i class="now-ui-icons education_paper"></i>
