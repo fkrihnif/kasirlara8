@@ -58,16 +58,28 @@ class TransactionController extends Controller
     }
     public function update(Request $request)
     {
-        $transaction = Transaction::find($request->id);
-        $transaction->update($request->all());
-        return redirect()->back()->with('success','Berhasil mengubah data transaksi');
+        $productTransaction = ProductTransaction::find($request->id);
+
+        $productTransaction->quantity = $request->quantity;
+        $productTransaction->disc_rp = $request->disc_rp;
+        $productTransaction->disc_prc = $request->disc_prc;
+        $productTransaction->update();
+
+        return response()->json([
+            'message' => 'success',
+            'data' => $productTransaction
+        ], 200);
     }
     
-    public function show($id)
+    public function show(Request $request)
     {
-        $transaction = Transaction::find($id);
-        $product_transaction = ProductTransaction::where('transaction_id', $transaction->id)->get();
-        return view('kasir.transaction.show', compact('transaction','product_transaction'));
+        $productTransaction = ProductTransaction::with('product')->find($request->id);
+        //return response
+        return response()->json([
+            'success' => true,
+            'message' => 'Detail Data Post',
+            'data'    => $productTransaction
+        ]); 
     }
     public function getProductCode(Request $request)
     {

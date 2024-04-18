@@ -153,6 +153,74 @@
         </div>
     </div>
   </div>
+
+<!-- Modal edit -->
+<div class="modal fade" id="modal-edit" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Edit Data</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+
+                <input type="hidden" id="productTransaction_id">
+
+                <div class="form-group">
+                    <label for="name_product" class="control-label">Nama Produk</label>
+                    <input type="text" class="form-control" id="name-product-edit" disabled>
+                </div>
+                <div class="row">
+                    <div class="col-4">
+                        <div class="form-group">
+                            <label for="get_product_disc_rp" class="control-label">Harga 1</label>
+                            <input type="number" class="form-control" id="price-product-edit" disabled>
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div class="form-group">
+                            <label for="get_product_disc_prc" class="control-label">Harga 3</label>
+                            <input type="number" class="form-control" id="price3-product-edit" disabled>
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div class="form-group">
+                            <label for="get_product_disc_prc" class="control-label">Harga 6</label>
+                            <input type="number" class="form-control" id="price6-product-edit" disabled>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="quantity" class="control-label">Quantity</label>
+                    <input type="number" class="form-control" id="quantity-edit" autofocus>
+                    <div class="alert alert-danger mt-2 d-none" role="alert" id="alert-quantity-edit"></div>
+                </div>
+                <div class="row">
+                    <div class="col-6">
+                        <div class="form-group">
+                            <label for="get_product_disc_rp" class="control-label">Disc Rp</label>
+                            <input type="number" class="form-control" id="product_disc_rp_edit">
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="form-group">
+                            <label for="get_product_disc_prc" class="control-label">Disc %</label>
+                            <input type="number" class="form-control" id="product_disc_prc_edit">
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">TUTUP</button>
+                <button type="button" class="btn btn-primary" id="update-quantity">UPDATE (F4)</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 @endsection
 @push('scripts')
 
@@ -176,13 +244,20 @@
                     }else if(item.quantity>=6) {
                         var harga = item.product.price6;
                     }
+                    var hargaa = formatRupiah(harga);
+                    var total = item.quantity * harga - item.disc_rp - ((item.disc_prc / 100) * (harga * item.quantity));
+                    var totalRp = formatRupiah(total);
+                    var diskon = +item.disc_rp + ((item.disc_prc / 100) * (harga * item.quantity));
+                    var diskonRpFormat = formatRupiah(diskon);
                     let content = `<tr>\
                         <td>${item.product.name}</td>\
                         <td>${item.quantity}</td>\
-                        <td>${harga}</td>\
-                        <td>${+item.disc_rp + ((item.disc_prc / 100) * (harga * item.quantity)) }</td>\
-                        <td>${item.quantity * harga - item.disc_rp - ((item.disc_prc / 100) * (harga * item.quantity))}</td>\
-                        <td><button type="button" value="${item.id}" data-id="${item.id}" class="btn btn-danger delete-btn btn-sm">Hapus</button></td>\
+                        <td>${hargaa}</td>\
+                        <td>${diskonRpFormat}</td>\
+                        <td>${totalRp}</td>\
+                        <td>
+                            <a href="javascript:void(0)" value="${item.id}" data-id="${item.id}" class="btn btn-primary btn-sm edit-btn">Edit</a><br>
+                            <button type="button" value="${item.id}" data-id="${item.id}" class="btn btn-danger delete-btn btn-sm mt-1">Hapus</button></td>\
                     \</tr>`
                     $('tbody').append(content);
                     });
@@ -306,8 +381,81 @@
                 });
                 fetchstudent();
                 getTotalBuy();
+            } else if (e.target.classList.contains('edit-btn')) {
+                let id = e.target.dataset.id;
+                e.target.disabled = true;
+                $.ajax({
+                    headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
+                    type: 'GET',
+                    dataType: 'json',
+                    data: {'id':id},
+                    url: '{{ route('admin.transaction.show') }}',
+                    success:function(response){
+
+                        //fill data to form
+                        $('#productTransaction_id').val(response.data.id);
+                        $('#name-product-edit').val(response.data.product.name);
+                        $('#price-product-edit').val(response.data.product.price);
+                        $('#price3-product-edit').val(response.data.product.price3);
+                        $('#price6-product-edit').val(response.data.product.price6);
+                        $('#quantity-edit').val(response.data.quantity);
+                        $('#product_disc_rp_edit').val(response.data.disc_rp);
+                        $('#product_disc_prc_edit').val(response.data.disc_prc);
+
+                        //open modal
+                        $('#modal-edit').modal('show');
+                        $(document).ready(function(){
+                            $("#modal-edit").on('shown.bs.modal', function(){
+                                $(this).find('#quantity-edit').focus();
+                                var autoselect = document.getElementById('quantity-edit');
+	                            autoselect.select();
+                            });
+                        });
+
+                        }
+                });
             }
         })
+
+        //action update quantity
+        const updateQuantity = document.getElementById('update-quantity');
+        updateQuantity.addEventListener('click', function() {
+            
+            //define variable
+            let productTransaction_id = $('#productTransaction_id').val();
+            let quantity   = $('#quantity-edit').val();
+            let productDiscRp   = $('#product_disc_rp_edit').val();
+            let productDiscPrc   = $('#product_disc_prc_edit').val();
+            let token   = $("meta[name='csrf-token']").attr("content");
+
+            //ajax
+            $.ajax({
+
+                url: `/admin/transaction/update/${productTransaction_id}`,
+                type: "PUT",
+                cache: false,
+                data: {
+                    "quantity": quantity,
+                    "disc_rp": productDiscRp,
+                    "disc_prc": productDiscPrc,
+                    "_token": token
+                },
+                success:function(response){
+
+                    //data post
+                    fetchstudent();
+                    getTotalBuy();
+                    $('#product_disc_rp_edit').val('');
+                    $('#product_disc_prc_edit').val('');
+
+                    //close modal
+                    $('#modal-edit').modal('hide');
+                    document.getElementById("get_product_code").focus();
+                    
+
+                }
+            })
+        });
 
         const productQuantity = document.getElementById('get_product_quantity');
         const productDiscRp = document.getElementById('get_product_disc_rp');
